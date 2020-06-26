@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types';
 import styled from "styled-components";
 import { useHistory } from "react-router";
 import { ProfileIcon } from "../icons/ProfileIcon";
@@ -55,4 +56,9 @@ const Link = ({ path, children }) => {
   };
 
   return <LinkWrapper onClick={handleClick}>{children}</LinkWrapper>;
+};
+
+Link.propTypes = {
+  path: PropTypes.string.isRequired,
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.string]).isRequired,
 };
