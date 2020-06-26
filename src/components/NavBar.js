@@ -4,20 +4,15 @@ import { useHistory } from "react-router";
 import { ProfileIcon } from "../icons/ProfileIcon";
 
 export function NavBar() {
-  const history = useHistory();
   return (
     <NavBarContainer>
       <LogoContainer>Project Capitalizer</LogoContainer>
       <LinkContainer>
-        <Link path={"/dashboard"} history={history}>
-          Dashboard
-        </Link>
+        <Link path={"/dashboard"}>Dashboard</Link>
 
-        <Link path={"/stocks"} history={history}>
-          Stocks
-        </Link>
+        <Link path={"/stocks"}>Stocks</Link>
 
-        <Link path={"/profile"} history={history}>
+        <Link path={"/profile"}>
           <ProfileIcon></ProfileIcon>
         </Link>
       </LinkContainer>
@@ -52,7 +47,9 @@ const LinkWrapper = styled.div`
   padding: 30px;
 `;
 
-const Link = ({ path, history, children }) => {
+const Link = ({ path, children }) => {
+  const history = useHistory();
+
   let handleClick = () => {
     history.push(path);
   };
