@@ -1,13 +1,34 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useHistory } from 'react-router';
+import { ProfileIcon } from '../icons/ProfileIcon';
 
 export function NavBar() {
+    const history = useHistory()
     return (
         <NavBarContainer>
             <LogoContainer>Project Capitalizer</LogoContainer>
             <LinkContainer>
-                <Link>Dashboard</Link>
-                <Link>Stocks</Link>
+                <Link
+                    path={'/dashboard'}
+                    history={history}
+                >
+                    Dashboard
+                </Link>
+
+                <Link
+                    path={'/stocks'}
+                    history={history}
+                >
+                    Stocks
+                </Link>
+
+                <Link
+                    path={'/profile'}
+                    history={history}
+                >
+                    <ProfileIcon></ProfileIcon>
+                </Link>
             </LinkContainer>
         </NavBarContainer>
     );
@@ -34,8 +55,22 @@ const LinkContainer = styled.div`
     padding-right: 30px;
 `
 
-const Link = styled.a`
+const LinkWrapper = styled.div`
     color: white;
     font-size: 25px;
-    padding: 20px;
+    padding: 30px
 `;
+
+const Link = ({path, history, children}) => {
+    let handleClick = (() => {
+        history.push(path);
+    })
+
+    return (
+        <LinkWrapper
+            onClick={handleClick}
+        >
+            {children}
+        </LinkWrapper>
+    );
+};
