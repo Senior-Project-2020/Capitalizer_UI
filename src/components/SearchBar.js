@@ -22,7 +22,7 @@ export function SearchBar(){
 const TextField = styled.textarea`
     height: 35px;
     padding-left: 10px;
-    width: calc(100% - 45px);
+    width: calc(100% - 55px);
     font-size: 30px;
     border: 0px;
     resize: None;
@@ -35,7 +35,7 @@ const SearchContainer = styled.div`
     margin: 20px 20px 20px 20px;
     padding-left: 15px;
     height: 40px;
-    width: calc(100% - 45px);
+    width: calc(100% - 55px);
     background: white;
     border-radius: 20px;
     border: 1px white;
