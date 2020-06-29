@@ -7,10 +7,6 @@ import styled from "styled-components";
 export function SearchBar(){
     const [state, updateState] = useContext(CapitalizerContext);
 
-    useEffect(() => {
-        console.log(state.searchField)
-    }, [])
-
     return (
         <SearchContainer>
             <SearchIcon></SearchIcon>
