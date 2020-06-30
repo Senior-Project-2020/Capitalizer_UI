@@ -6,12 +6,12 @@ import { StockInfo } from "./StockInfo";
 
 export function StockDetail({ stock, price }) {
     return (
-        <Fragment>
+        <StockDetailContainer>
             <DetailHeader data={stock}></DetailHeader>
             <InfoContainer>
                 <StockInfo data={price}></StockInfo>
             </InfoContainer>
-        </Fragment>
+        </StockDetailContainer>
     );
 }
 
@@ -22,6 +22,10 @@ StockDetail.propTypes = {
     }).isRequired,
     price: PropTypes.object.isRequired,
 }
+
+const StockDetailContainer = styled.div`
+    padding: 0px 15px;
+`;
 
 const HeaderContainer = styled.header`
     font-size: 35px;
@@ -36,7 +40,7 @@ const InfoContainer = styled.div`
 
 const LinkWrapper = styled.div`
     &:hover {
-        cursor: pointer
+        cursor: pointer;
     }
 `;
 
