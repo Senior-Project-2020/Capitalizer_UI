@@ -9,6 +9,7 @@ export function StockTab({ stock, price, isSelected, isTop, setSelectedTab }) {
     const change = round(price.predicted_closing_price - price.opening_price, 2);
     const percentChange = round(change / price.opening_price * 100, 2);
 
+    // Update tab container's style depending on isSelected and isTop props
     let style = {
         "width": "92.5%",
     };
@@ -61,6 +62,8 @@ StockTab.propTypes = {
         opening_price: PropTypes.number,
         predicted_closing_price: PropTypes.number,
     }).isRequired,
+    isSelected: PropTypes.bool.isRequired,
+    isTop: PropTypes.bool.isRequired,
 }
 
 const TabContainer = styled.div`
