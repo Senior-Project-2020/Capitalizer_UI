@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import PropTypes from 'prop-types';
 import { StockDetail } from "./StockDetail";
@@ -8,10 +8,8 @@ import { CapitalizerContext } from "../Context";
 export function DashBoardTable({ stocks }) {
     const [state,] = useContext(CapitalizerContext);
     const stockTabs = [];
-
-    useEffect(() => {
-        console.log("selectedBuyTab: " + state.selectedBuyTab);
-    }, [state.selectedBuyTab]);
+    const [selectedTab, setSelectedTab] = useState(stocks[0].stock.symbol);
+    const selectedStock = stocks.find(pair => pair.stock.symbol === selectedTab);
 
     // Create stock tabs
     for(let i = 0; i < stocks.length; i++){
@@ -20,8 +18,9 @@ export function DashBoardTable({ stocks }) {
                 key={i}
                 stock={stocks[i].stock} 
                 price={stocks[i].price} 
-                isSelected={state.selectedBuyTab === stocks[i].stock.symbol} 
+                isSelected={selectedTab === stocks[i].stock.symbol} 
                 isTop={i === 0}
+                setSelectedTab={setSelectedTab}
             ></StockTab>
         );
     }
@@ -35,7 +34,10 @@ export function DashBoardTable({ stocks }) {
                 </GraphContainer>
             </TopContainer>
             <DetailContainer>
-                <StockDetail stock={stocks.find(pair => pair.stock.symbol === state.selectedBuyTab).stock} price={stocks.find(pair => pair.stock.symbol === state.selectedBuyTab).price}></StockDetail>
+                <StockDetail 
+                    stock={selectedStock.stock} 
+                    price={selectedStock.price}
+                ></StockDetail>
             </DetailContainer>
         </DashBoardTableContainer>
     )

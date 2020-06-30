@@ -28,7 +28,10 @@ function App() {
           <SearchBar></SearchBar>
         </Route>
         <Route path="/dashboard">
-          <section style={{margin: "10px"}}>
+          <section style={{margin: "50px"}}>
+            <DashBoardTable stocks={stocks}></DashBoardTable>
+          </section>
+          <section style={{margin: "50px"}}>
             <DashBoardTable stocks={stocks}></DashBoardTable>
           </section>
         </Route>

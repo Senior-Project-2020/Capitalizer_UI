@@ -2,7 +2,6 @@ import React, { useReducer, createContext } from "react";
 
 const initialData = {
   searchField: "",
-  selectedBuyTab: "AMZN1",
 };
 
 export const CapitalizerContext = createContext([initialData, () => {}]);
@@ -11,9 +10,6 @@ function capitalizerReducer(state, action) {
   switch (action.type) {
     case "update search": {
       return { ...state, searchField: action.searchField };
-    }
-    case "update selectedBuyTab": {
-      return { ...state, selectedBuyTab: action.selectedBuyTab };
     }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);
