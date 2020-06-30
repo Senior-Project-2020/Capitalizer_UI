@@ -7,21 +7,29 @@ import { CapitalizerContext } from "../Context";
 
 export function DashBoardTable({ stocks }) {
     const [state,] = useContext(CapitalizerContext);
+    const stockTabs = [];
 
     useEffect(() => {
         console.log("selectedBuyTab: " + state.selectedBuyTab);
     }, [state.selectedBuyTab]);
+
+    // Create stock tabs
+    for(let i = 0; i < stocks.length; i++){
+        stockTabs.push(
+            <StockTab 
+                key={i}
+                stock={stocks[i].stock} 
+                price={stocks[i].price} 
+                isSelected={state.selectedBuyTab === "" ? i === 0 : state.selectedBuyTab === stocks[i].stock.symbol} 
+                isTop={i === 0}
+            ></StockTab>
+        );
+    }
     
     return(
         <DashBoardTableContainer>
             <TopContainer>
-                <TabsContainer>
-                    <StockTab stock={stocks[0].stock} price={stocks[0].price} isSelected={false} isTop={true}></StockTab>
-                    <StockTab stock={stocks[1].stock} price={stocks[1].price} isSelected={true} isTop={false}></StockTab>
-                    <StockTab stock={stocks[0].stock} price={stocks[0].price} isSelected={false} isTop={false}></StockTab>
-                    <StockTab stock={stocks[1].stock} price={stocks[1].price} isSelected={false} isTop={false}></StockTab>
-                    <StockTab stock={stocks[1].stock} price={stocks[1].price} isSelected={false} isTop={false}></StockTab>
-                </TabsContainer>
+                <TabsContainer>{stockTabs}</TabsContainer>
                 <GraphContainer>
                     <p>Graph Here</p>
                 </GraphContainer>
