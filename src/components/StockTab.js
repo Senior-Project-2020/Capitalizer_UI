@@ -12,14 +12,14 @@ export function StockTab({ stock, price }) {
     return (
         <TabContainer
             className={stock.symbol}
-            onClick={(event) => {
+            onClick={() => {
                 updateState({
                     type: "update selectedBuyTab",
                     selectedBuyTab: stock.symbol
                 });
             }}>
             <TabTable>
-                <thead>
+                <tbody>
                     <tr>
                         <SymbolHeader stockSymbol={stock.symbol}></SymbolHeader>
                         <TableHeader label={"Opening:"}></TableHeader>
@@ -27,8 +27,6 @@ export function StockTab({ stock, price }) {
                         <TableHeaderGap></TableHeaderGap>
                         <TableHeader label={"Change:"}></TableHeader>
                     </tr>
-                </thead>
-                <tbody>
                     <tr>
                         <TableData data={price.opening_price}></TableData>
                         <TableData data={price.predicted_closing_price}></TableData>
