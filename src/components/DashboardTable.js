@@ -35,7 +35,7 @@ export function DashBoardTable({ stocks }) {
                 </GraphContainer>
             </TopContainer>
             <DetailContainer>
-                <StockDetail stock={stocks[0].stock} price={stocks[0].price}></StockDetail>
+                <StockDetail stock={stocks.find(pair => pair.stock.symbol === state.selectedBuyTab).stock} price={stocks.find(pair => pair.stock.symbol === state.selectedBuyTab).price}></StockDetail>
             </DetailContainer>
         </DashBoardTableContainer>
     )

@@ -2,7 +2,7 @@ import React, { useReducer, createContext } from "react";
 
 const initialData = {
   searchField: "",
-  selectedBuyTab: "",
+  selectedBuyTab: "AMZN1",
 };
 
 export const CapitalizerContext = createContext([initialData, () => {}]);
