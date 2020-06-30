@@ -20,7 +20,7 @@ export function DashBoardTable({ stocks }) {
                 key={i}
                 stock={stocks[i].stock} 
                 price={stocks[i].price} 
-                isSelected={state.selectedBuyTab === "" ? i === 0 : state.selectedBuyTab === stocks[i].stock.symbol} 
+                isSelected={state.selectedBuyTab === stocks[i].stock.symbol} 
                 isTop={i === 0}
             ></StockTab>
         );
