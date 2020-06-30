@@ -31,6 +31,7 @@ const TextField = styled.textarea`
   border: 0px;
   resize: None;
   outline: None;
+  overflow: hidden;
 `;
 
 const SearchContainer = styled.div`
