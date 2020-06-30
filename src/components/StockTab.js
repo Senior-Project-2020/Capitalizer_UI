@@ -1,11 +1,8 @@
-import React, { useContext } from "react";
+import React from "react";
 import PropTypes from 'prop-types';
 import styled from "styled-components";
-import { CapitalizerContext } from "../Context";
 
 export function StockTab({ stock, price, isSelected, isTop, setSelectedTab }) {
-    const [, updateState] = useContext(CapitalizerContext);
-
     const change = round(price.predicted_closing_price - price.opening_price, 2);
     const percentChange = round(change / price.opening_price * 100, 2);
 
