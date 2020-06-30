@@ -3,15 +3,34 @@ import PropTypes from 'prop-types';
 import styled from "styled-components";
 import { CapitalizerContext } from "../Context";
 
-export function StockTab({ stock, price }) {
+export function StockTab({ stock, price, isSelected, isTop }) {
     const [, updateState] = useContext(CapitalizerContext);
 
     const change = round(price.predicted_closing_price - price.opening_price, 2);
     const percentChange = round(change / price.opening_price * 100, 2);
 
+    let style = {
+        "width": "92.5%",
+    };
+
+    if (isTop){
+        // If on top, add radius to top left corner
+        style = { ...style, "borderRadius": "15px 0px 0px 0px"}
+    }
+
+    if (isSelected){
+        // Increase the width, change the color, and add rounded corners on left side
+        style = {
+            "width": "96%", 
+            "background": "rgba(255, 255, 255, 0.30)",
+            "borderRadius": "10px 0px 0px 10px"
+        };
+    }
+
     return (
         <TabContainer
             className={stock.symbol}
+            style={style}
             onClick={() => {
                 updateState({
                     type: "update selectedBuyTab",
@@ -49,10 +68,14 @@ StockTab.propTypes = {
 }
 
 const TabContainer = styled.div`
+    display: block;
+    margin-left: auto;
+    margin-right: 0;
     border-style: solid;
     border-width: 1px 1px 1px 0px;
     border-color: black;
     padding: 10px;
+    background: rgba(255, 255, 255, 0.16);
 `;
 
 const TabTable = styled.table`

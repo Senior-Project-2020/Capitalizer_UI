@@ -14,11 +14,21 @@ export function DashBoardTable({ stocks }) {
     
     return(
         <DashBoardTableContainer>
-            <div style={{"width": "45%", "borderStyle": "solid", "borderWidth": "1px 1px 1px 0px", "borderColor": "black"}}>
-                <StockTab stock={stocks[0].stock} price={stocks[0].price}></StockTab>
-                <StockTab stock={stocks[1].stock} price={stocks[1].price}></StockTab>
-            </div>
-            <StockDetail stock={stocks[0].stock} price={stocks[0].price}></StockDetail>
+            <TopContainer>
+                <TabsContainer>
+                    <StockTab stock={stocks[0].stock} price={stocks[0].price} isSelected={false} isTop={true}></StockTab>
+                    <StockTab stock={stocks[1].stock} price={stocks[1].price} isSelected={true} isTop={false}></StockTab>
+                    <StockTab stock={stocks[0].stock} price={stocks[0].price} isSelected={false} isTop={false}></StockTab>
+                    <StockTab stock={stocks[1].stock} price={stocks[1].price} isSelected={false} isTop={false}></StockTab>
+                    <StockTab stock={stocks[1].stock} price={stocks[1].price} isSelected={false} isTop={false}></StockTab>
+                </TabsContainer>
+                <GraphContainer>
+                    <p>Graph Here</p>
+                </GraphContainer>
+            </TopContainer>
+            <DetailContainer>
+                <StockDetail stock={stocks[0].stock} price={stocks[0].price}></StockDetail>
+            </DetailContainer>
         </DashBoardTableContainer>
     )
 }
@@ -36,8 +46,36 @@ DashBoardTable.propTypes = {
 }
 
 const DashBoardTableContainer = styled.article`
-    background: rgba(255, 255, 255, 0.16);
-    padding: 20px;
-    border-radius: 15px;
     color: white;
+`;
+
+const TopContainer = styled.div`
+    display: flex;
+    justify-content: flex-end;
+`;
+
+const TabsContainer = styled.div`
+    width: 50%;
+`;
+
+const GraphContainer = styled.div`
+    width: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: 0;
+    background: black;
+    border-radius: 0px 15px 0px 0px;
+`;
+
+const DetailContainer = styled.div`
+    display: block;
+    margin-left: auto;
+    margin-right: 0;
+    width: 96.3%;
+    background: rgba(255, 255, 255, 0.16);
+    border-style: solid;
+    border-width: 1px 0px 0px 0px;
+    border-color: black;
+    border-radius: 0px 0px 15px 15px;
+    padding: 10px;
 `;
