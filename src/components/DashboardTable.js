@@ -1,15 +1,23 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import PropTypes from 'prop-types';
 import { StockDetail } from "./StockDetail";
 import { StockTab } from "./StockTab";
-import { CapitalizerContext } from "../Context";
 
 export function DashBoardTable({ stocks }) {
-    const [state,] = useContext(CapitalizerContext);
     const stockTabs = [];
     const [selectedTab, setSelectedTab] = useState(stocks[0].stock.symbol);
     const selectedStock = stocks.find(pair => pair.stock.symbol === selectedTab);
+
+    // Sort stocks based on percent change
+    stocks.sort((s1, s2) => {
+        const price1 = s1.price
+        const price2 = s2.price
+        const percentChange1 = (price1.predicted_closing_price - price1.opening_price) / price1.opening_price * 100;
+        const percentChange2 = (price2.predicted_closing_price - price2.opening_price) / price2.opening_price * 100;
+
+        return percentChange2 - percentChange1;
+    });
 
     // Create stock tabs
     for(let i = 0; i < stocks.length; i++){
