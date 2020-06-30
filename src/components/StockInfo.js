@@ -9,7 +9,7 @@ export function StockInfo({ data }) {
     // Create paragraph elements for the displayed data
     for(const [key, value] of Object.entries(data)) {
         if (!hiddenData.includes(key)) {
-            dataElements.push(<p>{startCase(key.replaceAll("_", " ")) + ": " + value}</p>);
+            dataElements.push(<p>{startCase(key.replace(/_/g, " ")) + ": " + value}</p>);
         }
     }
 
