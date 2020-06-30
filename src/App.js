@@ -1,8 +1,8 @@
 import React from "react";
 import { NavBar } from "./components/NavBar";
-import { SearchBar } from "./components/SearchBar";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { CapitalizerProvider } from "./Context";
+import { StockPage } from "./Stocks/Stocks";
 import "./App.css";
 
 function App() {
@@ -11,7 +11,10 @@ function App() {
       <Router>
         <NavBar></NavBar>
         <Route path="/">
-          <SearchBar></SearchBar>
+          <div></div>
+        </Route>
+        <Route path="/stocks">
+          <StockPage></StockPage>
         </Route>
       </Router>
     </CapitalizerProvider>
