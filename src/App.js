@@ -3,6 +3,7 @@ import { NavBar } from "./components/NavBar";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { CapitalizerProvider } from "./Context";
 import { StockPage } from "./Stocks/Stocks";
+import { ProfilePage } from "./Profile/Profile";
 import "./App.css";
 
 function App() {
@@ -15,6 +16,9 @@ function App() {
         </Route>
         <Route path="/stocks">
           <StockPage></StockPage>
+        </Route>
+        <Route path="/profile">
+          <ProfilePage></ProfilePage>
         </Route>
       </Router>
     </CapitalizerProvider>
