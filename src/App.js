@@ -4,6 +4,7 @@ import { SearchBar } from "./components/SearchBar";
 import { DashBoardTable } from "./components/DashboardTable";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { CapitalizerProvider } from "./Context";
+import { StockPage } from "./Stocks/Stocks";
 import "./App.css";
 
 function App() {
@@ -25,7 +26,10 @@ function App() {
       <Router>
         <NavBar></NavBar>
         <Route path="/">
-          <SearchBar></SearchBar>
+          <div></div>
+        </Route>
+        <Route path="/stocks">
+          <StockPage></StockPage>
         </Route>
         <Route path="/dashboard">
           <section style={{margin: "50px"}}>
