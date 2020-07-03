@@ -3,6 +3,7 @@ import styled from "styled-components";
 import PropTypes from 'prop-types';
 import { StockDetail } from "./StockDetail";
 import { StockTab } from "./StockTab";
+import { AreaGraph } from "./AreaGraph";
 
 export function DashBoardTable({ stocks }) {
     const stockTabs = [];
@@ -32,13 +33,21 @@ export function DashBoardTable({ stocks }) {
             ></StockTab>
         );
     }
-    
+
+    const data = [
+        {x: "01-02-2020", y: "100"},
+        {x: "01-03-2020", y: "150"},
+        {x: "01-04-2020", y: "1000"},
+        {x: "01-05-2020", y: "200"},
+        {x: "01-06-2020", y: "199"},
+    ]
+
     return(
         <DashBoardTableContainer>
             <TopContainer>
                 <TabsContainer>{stockTabs}</TabsContainer>
                 <GraphContainer>
-                    <p>Graph Here</p>
+                    <AreaGraph data={data}></AreaGraph>
                 </GraphContainer>
             </TopContainer>
             <DetailContainer>
@@ -81,8 +90,9 @@ const GraphContainer = styled.div`
     display: block;
     margin-left: auto;
     margin-right: 0;
-    background: black;
+    background: rgba(255, 255, 255, 0.16);
     border-radius: 0px 15px 0px 0px;
+    padding: 1% 2.5% 1% 1%
 `;
 
 const DetailContainer = styled.div`
