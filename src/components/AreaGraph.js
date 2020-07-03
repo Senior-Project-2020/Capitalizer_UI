@@ -2,20 +2,26 @@ import React from "react";
 import PropTypes from 'prop-types';
 import Chart from "react-apexcharts";
 
-export function AreaGraph({ data }) {
+export function AreaGraph({ data, positiveColor }) {
     let colors;
-    // Compare two most recent data points to determine the graph color
-    if (Number(data[data.length - 1].y) >= Number(data[data.length - 2].y)){
+    if (positiveColor){
+        // Green
         colors = {
             fill: "#00ff00",
             stroke: "#00aa00",
         }
     }
     else {
+        // Red
         colors = {
             fill: "#ff0000",
             stroke: "#aa0000",
         }
+    }
+
+    const annotation = {
+        start: data[data.length - 2].x,
+        end: data[data.length - 1].x,
     }
 
     const series = [{
@@ -25,8 +31,8 @@ export function AreaGraph({ data }) {
         annotations: {
             xaxis: [
                 {
-                    x: new Date("05 Jan 2020").getTime(),
-                    x2: new Date("06 Jan 2020").getTime(),
+                    x: annotation.start.getTime(),
+                    x2: annotation.end.getTime(),
                     borderColor: "#FFFFFF",
                     label: {
                         borderColor: "#FFFFFF",
@@ -62,7 +68,7 @@ export function AreaGraph({ data }) {
             colors: [colors.stroke],
         },
         title: {
-            text: "Stock Prices",
+            text: "Stock Closing Prices",
             align: "center",
             style: {
                 fontFamily: "iceland regular",
@@ -74,14 +80,15 @@ export function AreaGraph({ data }) {
             enabled: false,
         },
         xaxis: {
+            categories: Array.from(data, d => d.x.getTime()),
             type: 'datetime',
             labels: {
+                offsetX: -6,
                 style: {
                     colors: "#ffffff",
                     fontFamily: "iceland regular",
                 }
             },
-            categories: Array.from(data, d => d.x),
         },
         yaxis: {
             labels: {
@@ -106,8 +113,9 @@ export function AreaGraph({ data }) {
 AreaGraph.propTypes = {
     data: PropTypes.arrayOf(
         PropTypes.shape({
-            x: PropTypes.any.isRequired,
+            x: PropTypes.instanceOf(Date).isRequired,
             y: PropTypes.any.isRequired,
         }).isRequired,
     ),
+    positiveColor: PropTypes.bool.isRequired,
 }

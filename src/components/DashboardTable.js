@@ -10,10 +10,10 @@ export function DashBoardTable({ stocks }) {
     const [selectedTab, setSelectedTab] = useState(stocks[0].stock.symbol);
     const selectedStock = stocks.find(pair => pair.stock.symbol === selectedTab);
 
-    // Sort stocks based on percent change
+    // Sort stocks based on percent change (of last element in the prices array)
     stocks.sort((s1, s2) => {
-        const price1 = s1.price
-        const price2 = s2.price
+        const price1 = s1.prices[s1.prices.length - 1]
+        const price2 = s2.prices[s2.prices.length - 1]
         const percentChange1 = (price1.predicted_closing_price - price1.opening_price) / price1.opening_price * 100;
         const percentChange2 = (price2.predicted_closing_price - price2.opening_price) / price2.opening_price * 100;
 
@@ -26,7 +26,7 @@ export function DashBoardTable({ stocks }) {
             <StockTab 
                 key={i}
                 stock={stocks[i].stock} 
-                price={stocks[i].price} 
+                price={stocks[i].prices[stocks[i].prices.length - 1]} 
                 isSelected={selectedTab === stocks[i].stock.symbol} 
                 isTop={i === 0}
                 setSelectedTab={setSelectedTab}
@@ -34,26 +34,38 @@ export function DashBoardTable({ stocks }) {
         );
     }
 
-    const data = [
-        {x: "01-02-2020", y: "100"},
-        {x: "01-03-2020", y: "150"},
-        {x: "01-04-2020", y: "1000"},
-        {x: "01-05-2020", y: "200"},
-        {x: "01-06-2020", y: "199"},
-    ]
+    // Get the closing price data. Only get the predicted closing price of the last price in the list
+    const data = [];
+    for (let i = 0; i < selectedStock.prices.length; i++){
+        if (i === selectedStock.prices.length - 1){
+            data.push({
+                x: selectedStock.prices[i].date,
+                y: selectedStock.prices[i].predicted_closing_price,
+            });
+        }
+        else {
+            data.push({
+                x: selectedStock.prices[i].date,
+                y: selectedStock.prices[i].actual_closing_price,
+            });
+        }
+    }
 
     return(
         <DashBoardTableContainer>
             <TopContainer>
                 <TabsContainer>{stockTabs}</TabsContainer>
                 <GraphContainer>
-                    <AreaGraph data={data}></AreaGraph>
+                    <AreaGraph 
+                        data={data} 
+                        positiveColor={Number(data[data.length - 1].y) >= Number(data[data.length - 2].y)}
+                    ></AreaGraph>
                 </GraphContainer>
             </TopContainer>
             <DetailContainer>
                 <StockDetail 
                     stock={selectedStock.stock} 
-                    price={selectedStock.price}
+                    price={selectedStock.prices[selectedStock.prices.length - 1]}
                 ></StockDetail>
             </DetailContainer>
         </DashBoardTableContainer>
@@ -67,7 +79,14 @@ DashBoardTable.propTypes = {
                 name: PropTypes.string,
                 symbol: PropTypes.string,
             }).isRequired,
-            price: PropTypes.object.isRequired,
+            prices: PropTypes.arrayOf(
+                PropTypes.shape({
+                    date: PropTypes.instanceOf(Date).isRequired,
+                    opening_price: PropTypes.number.isRequired,
+                    predicted_closing_price: PropTypes.number.isRequired,
+                    actual_closing_price: PropTypes.number.isRequired,
+                }),
+            ),
         }),
     ).isRequired,
 }
