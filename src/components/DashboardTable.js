@@ -74,6 +74,7 @@ DashBoardTable.propTypes = {
 
 const DashBoardTableContainer = styled.article`
     color: white;
+    margin: 5% 5% 5% 6%;
 `;
 
 const TopContainer = styled.div`
@@ -99,11 +100,10 @@ const DetailContainer = styled.div`
     display: block;
     margin-left: auto;
     margin-right: 0;
-    width: 96.3%;
     background: rgba(255, 255, 255, 0.16);
     border-style: solid;
     border-width: 1px 0px 0px 0px;
     border-color: black;
     border-radius: 0px 0px 15px 15px;
-    padding: 10px;
+    padding: 1.5% 2%;
 `;

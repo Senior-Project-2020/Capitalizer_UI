@@ -7,9 +7,7 @@ export function StockTab({ stock, price, isSelected, isTop, setSelectedTab }) {
     const percentChange = round(change / price.opening_price * 100, 2);
 
     // Update tab container's style depending on isSelected and isTop props
-    let style = {
-        "width": "92.5%",
-    };
+    let style;
 
     if (isTop){
         // If on top, add radius to top left corner
@@ -19,7 +17,7 @@ export function StockTab({ stock, price, isSelected, isTop, setSelectedTab }) {
     if (isSelected){
         // Increase the width, change the color, and add rounded corners on left side
         style = {
-            "width": "96%", 
+            "margin": "0% 0% 0% -5%", 
             "background": "rgba(255, 255, 255, 0.30)",
             "borderRadius": "10px 0px 0px 10px"
         };
@@ -70,7 +68,7 @@ const TabContainer = styled.div`
     border-style: solid;
     border-width: 1px 1px 1px 0px;
     border-color: black;
-    padding: 10px;
+    padding: 2.75%;
     background: rgba(255, 255, 255, 0.16);
 `;
 

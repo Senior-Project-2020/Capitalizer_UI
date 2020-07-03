@@ -32,10 +32,8 @@ function App() {
           <StockPage></StockPage>
         </Route>
         <Route path="/dashboard">
-          <section style={{margin: "50px"}}>
+          <section>
             <DashBoardTable stocks={stocks}></DashBoardTable>
-          </section>
-          <section style={{margin: "50px"}}>
             <DashBoardTable stocks={stocks}></DashBoardTable>
           </section>
         </Route>
