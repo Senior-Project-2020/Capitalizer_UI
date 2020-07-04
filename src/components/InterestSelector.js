@@ -47,6 +47,8 @@ const InterestSelectorContainer = styled.div`
 `;
 
 export function InterestEntry({ entry, state, updateState }) {
+  let color = ((state.includes(entry) || state.length < 3) ? "#ffffff" : "#777777");
+
   function handleClick() {
     if (state.length < 3 && !state.includes(entry)) {
       updateState([...state, entry]);
@@ -59,12 +61,14 @@ export function InterestEntry({ entry, state, updateState }) {
 
   return (
     <InterestContainer onClick={handleClick}>
-      <InterestLabel>{entry}</InterestLabel>
+      <InterestLabel
+        style={{"color": color}}
+      >{entry}</InterestLabel>
       <div style={{ marginLeft: "auto" }}>
         {state.includes(entry) ? (
           <CheckSelected></CheckSelected>
         ) : (
-          <CheckUnSelected></CheckUnSelected>
+          <CheckUnSelected fill={color}></CheckUnSelected>
         )}
       </div>
     </InterestContainer>
