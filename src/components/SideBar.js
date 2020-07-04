@@ -8,6 +8,7 @@ export function SideBar() {
   for (const [index, value] of Categories.entries()) {
     AvailableCategories.push(
       <Category
+        key={index}
         onClick={() => {
           /* TODO HANDLE CLICK */
         }}
