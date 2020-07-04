@@ -1,5 +1,6 @@
 import React from "react";
 import { NavBar } from "./components/NavBar";
+import { DashboardPage } from "./Dashboard/Dashboard";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { CapitalizerProvider } from "./Context";
 import { StockPage } from "./Stocks/Stocks";
@@ -16,6 +17,9 @@ function App() {
         </Route>
         <Route path="/stocks">
           <StockPage></StockPage>
+        </Route>
+        <Route path="/dashboard">
+          <DashboardPage></DashboardPage>
         </Route>
         <Route path="/profile">
           <ProfilePage></ProfilePage>
