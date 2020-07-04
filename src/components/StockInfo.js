@@ -9,7 +9,13 @@ export function StockInfo({ data }) {
     // Create paragraph elements for the displayed data
     for(const [key, value] of Object.entries(data)) {
         if (!hiddenData.includes(key)) {
-            dataElements.push(<p key={key}>{startCase(key.replace(/_/g, " ")) + ": " + value}</p>);
+            if (key === "volume"){
+                dataElements.push(<p key={key}>{startCase(key.replace(/_/g, " ")) + ": " + value}</p>)
+            }
+            else {
+                // Add dollar sign and use two decimal places for fields with money data
+                dataElements.push(<p key={key}>{startCase(key.replace(/_/g, " ")) + ": $" + value.toFixed(2)}</p>);
+            }
         }
     }
 

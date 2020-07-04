@@ -39,7 +39,7 @@ export function AreaGraph({ data, positiveColor }) {
                         text: "Predicted",
                         style: {
                             fontFamily: "iceland regular",
-                            fontSize: "14px",
+                            fontSize: "18px",
                             color: "#FFFFFF",
                             background: "#555555",
                         },
@@ -91,6 +91,14 @@ export function AreaGraph({ data, positiveColor }) {
             },
         },
         yaxis: {
+            title: {
+                text: "Closing Price ($)",
+                style: {
+                    color: "#ffffff",
+                    fontFamily: "iceland regular",
+                    fontSize: "20px",
+                },
+            },
             labels: {
                 style: {
                     colors: "#ffffff",

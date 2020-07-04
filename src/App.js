@@ -1,6 +1,5 @@
 import React from "react";
 import { NavBar } from "./components/NavBar";
-import { SearchBar } from "./components/SearchBar";
 import { DashboardPage } from "./Dashboard/Dashboard";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { CapitalizerProvider } from "./Context";

@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import styled from "styled-components";
 
 export function StockTab({ stock, price, isSelected, isTop, setSelectedTab }) {
-    const change = round(price.predicted_closing_price - price.opening_price, 2);
-    const percentChange = round(change / price.opening_price * 100, 2);
+    const change = price.predicted_closing_price - price.opening_price;
+    const percentChange = change / price.opening_price * 100;
 
     // Update tab container's style depending on isSelected and isTop props
     let style;
@@ -39,9 +39,9 @@ export function StockTab({ stock, price, isSelected, isTop, setSelectedTab }) {
                         <TableHeader label={"Change:"}></TableHeader>
                     </tr>
                     <tr>
-                        <TableData data={price.opening_price}></TableData>
-                        <TableData data={price.predicted_closing_price}></TableData>
-                        <TableData data={change + " (" + percentChange + "%)"}></TableData>
+                        <TableData data={"$" + price.opening_price.toFixed(2)}></TableData>
+                        <TableData data={"$" + price.predicted_closing_price.toFixed(2)}></TableData>
+                        <TableData data={"$" + change.toFixed(2) + " (" + percentChange.toFixed(2) + "%)"}></TableData>
                     </tr>
                 </tbody>
             </TabTable>
@@ -104,14 +104,4 @@ const TableData = ({ data }) => {
     return (
         <td style={{ "textAlign": "center" }}>{data}</td>
     );
-}
-
-// Helper function to round number "n" to decimal places "p"
-function round(n, p) {
-    const n1 = n * Math.pow(10, p + 1);
-    const n2 = Math.floor(n1 / 10);
-    if (n1 >= (n2 * 10 + 5)) {
-        return (n2 + 1) / Math.pow(10, p);
-    }
-    return n2 / Math.pow(10, p);
 }
