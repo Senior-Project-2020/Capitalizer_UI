@@ -1,18 +1,44 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { UpArrowIcon, DownArrowIcon } from "../icons/ArrowIcons";
+import { SmallAreaGraph } from "./AreaGraph";
+import PropTypes from "prop-types";
 
-export function SearchStockDetail() {
+export function SearchStockDetail({
+  name,
+  openPrice,
+  predictedClose,
+  low,
+  high,
+  previousClose,
+  volume,
+  selectedStock,
+}) {
   const [open, setOpen] = useState(false);
+
+  const data = [];
+  for (let i = 0; i < selectedStock.prices.length; i++) {
+    if (i === selectedStock.prices.length - 1) {
+      data.push({
+        x: selectedStock.prices[i].date,
+        y: selectedStock.prices[i].predicted_closing_price,
+      });
+    } else {
+      data.push({
+        x: selectedStock.prices[i].date,
+        y: selectedStock.prices[i].actual_closing_price,
+      });
+    }
+  }
 
   return (
     <StockDetailContainer>
-      <div style={{display: "flex", alignItems: "center"}}>
+      <div style={{ display: "flex", alignItems: "center" }}>
         <TextContainer>
-          <StockDetailHeader>Amazon.com Inc. (AMZN)</StockDetailHeader>
+          <StockDetailHeader>{name}</StockDetailHeader>
           <StockDetailBody>
-            <TextEntry>Opening Price: $100.00</TextEntry>
-            <TextEntry>Predicted Closing: $102.00</TextEntry>
+            <TextEntry>Opening Price: ${openPrice}</TextEntry>
+            <TextEntry>Predicted Closing: ${predictedClose}</TextEntry>
             {!open ? <TextEntry>More Stock Info ...</TextEntry> : null}
           </StockDetailBody>
         </TextContainer>
@@ -24,19 +50,74 @@ export function SearchStockDetail() {
           {open ? <UpArrowIcon></UpArrowIcon> : <DownArrowIcon></DownArrowIcon>}
         </IconContainer>
       </div>
-      {open ? 
-      <div style={{display: "flex", alignItems: "center"}}>
+      {open ? (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            margin: "0px 20px 0px 20px",
+          }}
+        >
           <TextContainer>
-              <TextEntry>Low Price: $50.00</TextEntry>
-              <TextEntry>High Price: $50.00</TextEntry>
-              <TextEntry>Yesterdays Closing: $75.00</TextEntry>
-              <TextEntry>Volume: 129428109</TextEntry>
+            <TextEntry>Low Price: ${low}</TextEntry>
+            <TextEntry>High Price: ${high}</TextEntry>
+            <TextEntry>Yesterdays Closing: ${previousClose}</TextEntry>
+            <TextEntry>Volume: {volume}}</TextEntry>
           </TextContainer>
-      </div>
-      : null}
+          <div style={{ margin: "5px 5px 5px auto" }}>
+            <div
+              style={{
+                padding: "15px",
+                background: "rgba(255, 255, 255, 0.16)",
+                border: "0.5px solid black",
+                borderRadius: "15px",
+              }}
+            >
+              <SmallAreaGraph
+                data={data}
+                positiveColor={
+                  Number(data[data.length - 1].y) >=
+                  Number(data[data.length - 2].y)
+                }
+              ></SmallAreaGraph>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </StockDetailContainer>
   );
 }
+
+SearchStockDetail.propTypes = {
+  name: PropTypes.string.isRequired,
+  openPrice: PropTypes.number.isRequired,
+  predictedClose: PropTypes.number.isRequired,
+  low: PropTypes.number.isRequired,
+  high: PropTypes.number.isRequired,
+  previousClose: PropTypes.number.isRequired,
+  volume: PropTypes.number.isRequired,
+  selectedStock: PropTypes.shape({
+    stock: PropTypes.shape({
+      category: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      stock_prices: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
+      symbol: PropTypes.string.isRequired,
+    }).isRequired,
+    prices: PropTypes.arrayOf(
+      PropTypes.shape({
+        actual_closing_price: PropTypes.number.isRequired,
+        daily_high: PropTypes.number.isRequired,
+        daily_low: PropTypes.number.isRequired,
+        date: PropTypes.instanceOf(Date).isRequired,
+        id: PropTypes.number.isRequired,
+        opening_price: PropTypes.number.isRequired,
+        predicted_closing_price: PropTypes.number.isRequired,
+        stock: PropTypes.string.isRequired,
+        volume: PropTypes.number.isRequired,
+      }).isRequired
+    ).isRequired,
+  }).isRequired,
+};
 
 const StockDetailContainer = styled.div`
   background: rgba(255, 255, 255, 0.16);
@@ -55,12 +136,12 @@ const IconContainer = styled.div`
 const TextEntry = styled.div`
   color: white;
   margin: 10px 30px 10px 0px;
-  font-size: 18px;
+  font-size: 22px;
 `;
 
 const StockDetailHeader = styled.div`
   color: white;
-  font-size: 30px;
+  font-size: 32px;
 `;
 
 const StockDetailBody = styled.div`
