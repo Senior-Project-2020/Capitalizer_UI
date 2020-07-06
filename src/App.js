@@ -12,6 +12,7 @@ function App() {
   return (
     <CapitalizerProvider>
       <Router>
+        <Route exact path="/" component={LogInPage}/>
         <Route path="/stocks">
           <NavBar></NavBar>
           <StockPage></StockPage>
@@ -24,9 +25,7 @@ function App() {
           <NavBar></NavBar>
           <ProfilePage></ProfilePage>
         </Route>
-        <Route path="/login">
-          <LogInPage></LogInPage>
-        </Route>
+
       </Router>
     </CapitalizerProvider>
   );
