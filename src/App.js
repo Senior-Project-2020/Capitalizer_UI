@@ -5,24 +5,27 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import { CapitalizerProvider } from "./Context";
 import { StockPage } from "./Stocks/Stocks";
 import { ProfilePage } from "./Profile/Profile";
+import { LogInPage } from "./LogIn/LogIn";
 import "./App.css";
 
 function App() {
   return (
     <CapitalizerProvider>
       <Router>
-        <NavBar></NavBar>
-        <Route path="/">
-          <div></div>
-        </Route>
         <Route path="/stocks">
+          <NavBar></NavBar>
           <StockPage></StockPage>
         </Route>
         <Route path="/dashboard">
+          <NavBar></NavBar>
           <DashboardPage></DashboardPage>
         </Route>
         <Route path="/profile">
+          <NavBar></NavBar>
           <ProfilePage></ProfilePage>
+        </Route>
+        <Route path="/login">
+          <LogInPage></LogInPage>
         </Route>
       </Router>
     </CapitalizerProvider>
