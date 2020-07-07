@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router";
+import axios from "axios";
+import FormData from 'form-data';
 
 export function SignupForm() {
     const [username, setUsername] = useState("");
@@ -11,14 +13,46 @@ export function SignupForm() {
 
     const submitForm = (username, password1, password2) => {
         if (username === "" || password1 === "" || password2 === ""){
-            return "Fields cannot be empty";
+            setWarning(<WarningMessage>{"Fields cannot be empty"}</WarningMessage>);
         }
         else if (password1 !== password2){
-            return "Passwords must match";
+            setWarning(<WarningMessage>{"Passwords must match"}</WarningMessage>);
         }
         else{
-            // API call
-            return "";
+            const form = new FormData();
+            form.append("username", username);
+            form.append("email", "");
+            form.append("password1", password1);
+            form.append("password2", password2);
+
+            axios.post("http://localhost:8000/api/v1/rest-auth/registration/", form).then((response) => {
+                if (response.status === 201){
+                    onFormSuccess();
+                }
+                else{
+                    setWarning(<WarningMessage>{"Server error: Please try again later."}</WarningMessage>);
+                }
+            }).catch((err) => {
+                const errors = [];
+                
+                // If there are username errors, then only display those
+                if (err.response.data.username !== undefined){
+                    for (const errIndex in err.response.data.username){
+                        errors.push(<WarningMessage key={errIndex}>{err.response.data.username[errIndex]}</WarningMessage>);
+                    }
+                }
+                // If there are no username errors, then display all other errors
+                else {
+                    for (const obj in err.response.data){
+                        for (const errIndex in err.response.data[obj]){
+                            const msg = err.response.data[obj][errIndex];
+                            errors.push(<WarningMessage key={errIndex}>{msg}</WarningMessage>);
+                        }
+                    }
+                }
+                
+                setWarning(errors);
+            })
         }
     }
   
@@ -30,13 +64,7 @@ export function SignupForm() {
         <Form
             onSubmit={(event) => {
                 event.preventDefault();
-                const result = submitForm(username, password1, password2);
-                if (result === "") {
-                    onFormSuccess();
-                }
-                else {
-                    setWarning(result);
-                }
+                submitForm(username, password1, password2);
             }}
         >
             <HeaderContainer>
@@ -70,9 +98,9 @@ export function SignupForm() {
                 ></input>
             </FormFieldContainer>
 
-            {warning != "" &&
+            {warning !== "" &&
                 <WarningMessageContainer>
-                    <WarningMessage>{warning}</WarningMessage>
+                    {warning}
                 </WarningMessageContainer>
             }
 
@@ -112,7 +140,9 @@ const FormFieldContainer = styled.div`
 
 const WarningMessageContainer = styled.div`
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
     margin: -4% 0 -1% 0;
 `;
 
@@ -121,6 +151,8 @@ const WarningMessage = styled.p`
     float: right;
     font-size: 18px;
     color: red;
+    padding: 0;
+    margin: 2% 0;
 `;
 
 const SubmitButtonContainer = styled.div`
@@ -130,6 +162,7 @@ const SubmitButtonContainer = styled.div`
     border-width: 1px 0px 0px 0px;
     border-color: white;
     padding-top: 10px;
+    margin-top: 1%;
 `;
 
 const SubmitButtonInput = styled.input`
