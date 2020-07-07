@@ -4,6 +4,7 @@ import { DashboardPage } from "./Dashboard/Dashboard";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { CapitalizerProvider } from "./Context";
 import { StockPage } from "./Stocks/Stocks";
+import { SignupPage } from "./Signup/Signup";
 import { ProfilePage } from "./Profile/Profile";
 import "./App.css";
 
@@ -14,6 +15,9 @@ function App() {
         <NavBar></NavBar>
         <Route path="/">
           <div></div>
+        </Route>
+        <Route path="/signup">
+          <SignupPage></SignupPage>
         </Route>
         <Route path="/stocks">
           <StockPage></StockPage>
