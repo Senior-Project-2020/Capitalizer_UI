@@ -1,5 +1,6 @@
 import React from "react";
 import { NavBar } from "./components/NavBar";
+import { NonauthNavBar } from "./components/NonauthNavBar";
 import { DashboardPage } from "./Dashboard/Dashboard";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { CapitalizerProvider } from "./Context";
@@ -17,6 +18,7 @@ function App() {
           <div></div>
         </Route>
         <Route path="/signup">
+          <NonauthNavBar></NonauthNavBar>
           <SignupPage></SignupPage>
         </Route>
         <Route path="/stocks">
