@@ -25,7 +25,6 @@ function App() {
           <NavBar></NavBar>
           <ProfilePage></ProfilePage>
         </Route>
-
       </Router>
     </CapitalizerProvider>
   );
