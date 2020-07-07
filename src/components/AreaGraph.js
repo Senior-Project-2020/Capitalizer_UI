@@ -204,6 +204,7 @@ export function SmallAreaGraph({ data, positiveColor }) {
                 series={series} 
                 type="area"
                 height={"100%"}
+                width={"500px"}
             ></Chart>
     );
 } 

@@ -42,11 +42,13 @@ export function SearchStockDetail({
             {!open ? <TextEntry>More Stock Info ...</TextEntry> : null}
           </StockDetailBody>
         </TextContainer>
+        
         <IconContainer
           onClick={() => {
             setOpen(!open);
           }}
         >
+          {open ? <TextEntry style={{marginRight: "120px"}}>Closing Price Over Time</TextEntry>: null}
           {open ? <UpArrowIcon></UpArrowIcon> : <DownArrowIcon></DownArrowIcon>}
         </IconContainer>
       </div>
@@ -130,6 +132,7 @@ const StockDetailContainer = styled.div`
 const TextContainer = styled.div``;
 
 const IconContainer = styled.div`
+  display: flex;
   margin-left: auto;
 `;
 
