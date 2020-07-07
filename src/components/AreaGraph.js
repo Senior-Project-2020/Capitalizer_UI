@@ -145,11 +145,6 @@ export function SmallAreaGraph({ data, positiveColor }) {
         }
     }
 
-    const annotation = {
-        start: data[data.length - 2].x,
-        end: data[data.length - 1].x,
-    }
-
     const series = [{
         data: Array.from(data, d => d.y),
     }]
