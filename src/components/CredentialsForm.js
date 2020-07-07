@@ -9,29 +9,35 @@ export function CredentialsForm({
 }) {
   const star = "*";
   return (
-    <div style={{ display: "flex" }}>
-      <CredentialsFormContainer>
-        <LabelInputPair>
-          <Label>Username: </Label>
-          <TextInput
-            onChange={(event) => {
-              setUsername(event.target.value);
-            }}
-            value={username}
-          ></TextInput>
-        </LabelInputPair>
-        <LabelInputPair>
-          <Label>Password:</Label>
-          <TextInput
-            style={{ webkitTextSecurity: "disc", textSecurity: "disc" }}
-            onChange={(event) => {
-              setPassword(event.target.value);
-            }}
-            value={password}
-          ></TextInput>
-        </LabelInputPair>
-      </CredentialsFormContainer>
-    </div>
+      <div style={{ display: "flex" }}>
+        <CredentialsFormContainer>
+          <LabelInputPair>
+            <label>Username: </label>
+            <TextInput
+                type="text" 
+                onChange={(event) => {
+                    setUsername(event.target.value);
+                }}
+            ></TextInput>
+            {/* <TextInput
+              onChange={(event) => {
+                setUsername(event.target.value);
+              }}
+              value={username}
+              style={{autocomplete: "username"}}
+            ></TextInput> */}
+          </LabelInputPair>
+          <LabelInputPair>
+            <label>Password:</label>
+            <TextInput
+                type="password" 
+                onChange={(event) => {
+                    setPassword(event.target.value);
+                }}
+            ></TextInput>
+          </LabelInputPair>
+        </CredentialsFormContainer>
+      </div>
   );
 }
 
@@ -49,21 +55,14 @@ const CredentialsFormContainer = styled.div`
 const LabelInputPair = styled.div`
   display: flex;
   align-items: center;
-`;
-
-const Label = styled.div`
   color: white;
   margin: 5px;
   font-size: 20px;
 `;
 
 const TextInput = styled.input`
-  height: 23px;
-  width: 300px;
-  margin: 5px;
-  font-size: 18px;
-  border: 0px;
-  resize: None;
-  outline: None;
-  overflow: hidden;
+    width: 300px;
+    border: 0px;
+    margin: 5px;
+    outline: none;
 `;
