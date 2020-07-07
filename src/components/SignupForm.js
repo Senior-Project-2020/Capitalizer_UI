@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router";
+import { CapitalizerContext } from "../Context";
 import axios from "axios";
 import FormData from 'form-data';
 
@@ -9,6 +10,7 @@ export function SignupForm() {
     const [password1, setPassword1] = useState("");
     const [password2, setPassword2] = useState("");
     const [warning, setWarning] = useState("");
+    const [,updateContext] = useContext(CapitalizerContext);
     const history = useHistory();
 
     const submitForm = (username, password1, password2) => {
@@ -27,6 +29,10 @@ export function SignupForm() {
 
             axios.post("http://localhost:8000/api/v1/rest-auth/registration/", form).then((response) => {
                 if (response.status === 201){
+                    updateContext({
+                        type: "update user",
+                        user: response.data.key,
+                    });
                     onFormSuccess();
                 }
                 else{
