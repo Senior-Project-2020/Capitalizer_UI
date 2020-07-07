@@ -37,8 +37,8 @@ export function SearchStockDetail({
         <TextContainer>
           <StockDetailHeader>{name}</StockDetailHeader>
           <StockDetailBody>
-            <TextEntry>Opening Price: ${openPrice}</TextEntry>
-            <TextEntry>Predicted Closing: ${predictedClose}</TextEntry>
+            <TextEntry>Opening Price: ${openPrice.toFixed(2)}</TextEntry>
+            <TextEntry>Predicted Closing: ${predictedClose.toFixed(2)}</TextEntry>
             {!open ? <TextEntry>More Stock Info ...</TextEntry> : null}
           </StockDetailBody>
         </TextContainer>
@@ -61,10 +61,10 @@ export function SearchStockDetail({
           }}
         >
           <TextContainer>
-            <TextEntry>Low Price: ${low}</TextEntry>
-            <TextEntry>High Price: ${high}</TextEntry>
-            <TextEntry>Yesterdays Closing: ${previousClose}</TextEntry>
-            <TextEntry>Volume: {volume}}</TextEntry>
+            <TextEntry>Low Price: ${low.toFixed(2)}</TextEntry>
+            <TextEntry>High Price: ${high.toFixed(2)}</TextEntry>
+            <TextEntry>Yesterdays Closing: ${previousClose.toFixed(2)}</TextEntry>
+            <TextEntry>Volume: {volume}</TextEntry>
           </TextContainer>
           <div style={{ margin: "5px 5px 5px auto" }}>
             <div
