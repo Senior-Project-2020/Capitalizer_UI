@@ -1,19 +1,41 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { useHistory } from "react-router";
 
 export function SignupForm() {
     const [username, setUsername] = useState("");
     const [password1, setPassword1] = useState("");
     const [password2, setPassword2] = useState("");
+    const [warning, setWarning] = useState("");
+    const history = useHistory();
 
-    useEffect(() => {
-        console.log(username + " " + password1 + " " + password2);
-    });
+    const submitForm = (username, password1, password2) => {
+        if (username === "" || password1 === "" || password2 === ""){
+            return "Fields cannot be empty";
+        }
+        else if (password1 !== password2){
+            return "Passwords must match";
+        }
+        else{
+            // API call
+            return "";
+        }
+    }
+  
+    const onFormSuccess = () => {
+        history.push("/dashboard");
+    };
 
     return (
         <Form
             onSubmit={(event) => {
                 event.preventDefault();
+                const result = submitForm(username, password1, password2);
+                if (result === "") {
+                    onFormSuccess();
+                }
+                else {
+                    setWarning(result);
                 }
             }}
         >
@@ -48,6 +70,12 @@ export function SignupForm() {
                 ></input>
             </FormFieldContainer>
 
+            {warning != "" &&
+                <WarningMessageContainer>
+                    <WarningMessage>{warning}</WarningMessage>
+                </WarningMessageContainer>
+            }
+
             <SubmitButtonContainer>
                 <SubmitButtonInput type="submit" value="Sign up!"></SubmitButtonInput>
             </SubmitButtonContainer>
@@ -55,10 +83,6 @@ export function SignupForm() {
     );
 }
 
-const submitForm = (username, password1, password2) => {
-    console.log("SUBMIT: " + username + " " + password1 + " " + password2);
-    return true;
-}
 const Form = styled.form`
     background: rgba(255, 255, 255, 0.16);
     width: 375px;
