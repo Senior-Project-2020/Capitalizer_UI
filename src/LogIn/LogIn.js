@@ -5,6 +5,8 @@ import { LogInButton } from "../components/Buttons";
 import { CapitalizerContext } from "../Context";
 import axios from "axios";
 
+const url = "http://54.198.60.36/api/v1/"
+
 export function LogInPage() {
   const history = useHistory();
   const [context, updateContext] = useContext(CapitalizerContext);
@@ -18,11 +20,18 @@ export function LogInPage() {
         password: password,
     }
 
-    axios.post("http://localhost:8000/api/v1/rest-auth/login/", loginCredntials).then((response) => {
+    axios.post(url + "rest-auth/login/", loginCredntials).then((response) => {
         if(response.status == 200){
             updateContext({
+                type: "update token",
+                token: response.data.key,
+            })
+            console.log(response.data.key)
+            axios.get(url + "rest-auth/user/", {headers: {Authorization: "Token " + response.data.key}}).then((response) => {
+              updateContext({
                 type: "update user",
-                user: response.data.key,
+                user: response.data,
+              })
             })
             history.push("/dashboard");
         }else{

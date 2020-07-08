@@ -1,16 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
+import { CapitalizerContext } from "../Context";
 import { InterestSelector } from "../components/InterestSelector";
 import { LogOutButton } from "../components/Buttons";
 import { Key } from "../components/Key";
 
 export function ProfilePage() {
-  const testKey = "FD#&@Sjfs812j21jlf";
+  const [context, ] = useContext(CapitalizerContext);
   return (
     <div
       style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
       <h1 style={{ color: "white" }}>Welcome Carter!</h1>
-      <Key apikey={testKey}></Key>
+      <Key apikey={context.user}></Key>
       <InterestSelector></InterestSelector>
       <LogOutButton></LogOutButton>
     </div>
