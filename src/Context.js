@@ -2,6 +2,7 @@ import React, { useReducer, createContext } from "react";
 
 const initialData = {
   searchField: "",
+  authToken: "f9e3e97bc834ee1edee7a26e98b78f07c0e4fb9e",
 };
 
 export const CapitalizerContext = createContext([initialData, () => {}]);
@@ -10,6 +11,9 @@ function capitalizerReducer(state, action) {
   switch (action.type) {
     case "update search": {
       return { ...state, searchField: action.searchField };
+    }
+    case "update token": {
+      return { ...state, authToken: action.token};
     }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);
