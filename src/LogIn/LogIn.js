@@ -19,7 +19,7 @@ export function LogInPage() {
     }
 
     axios.post("http://localhost:8000/api/v1/rest-auth/login/", loginCredntials).then((response) => {
-        if(response.status == 200){
+        if(response.status === 200){
             updateContext({
                 type: "update user",
                 user: response.data.key,
