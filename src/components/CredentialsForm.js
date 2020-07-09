@@ -2,12 +2,9 @@ import React from "react";
 import styled from "styled-components";
 
 export function CredentialsForm({
-  username,
   setUsername,
-  password,
   setPassword,
 }) {
-  const star = "*";
   return (
       <div style={{ display: "flex" }}>
         <CredentialsFormContainer>
@@ -19,13 +16,6 @@ export function CredentialsForm({
                     setUsername(event.target.value);
                 }}
             ></TextInput>
-            {/* <TextInput
-              onChange={(event) => {
-                setUsername(event.target.value);
-              }}
-              value={username}
-              style={{autocomplete: "username"}}
-            ></TextInput> */}
           </LabelInputPair>
           <LabelInputPair>
             <label>Password:</label>
