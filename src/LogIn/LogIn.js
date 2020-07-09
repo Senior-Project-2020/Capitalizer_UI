@@ -15,13 +15,13 @@ export function LogInPage() {
   const [loginFail, setLoginFail] = useState(false);
 
   function handleClick(event) {
-    const loginCredntials = {
+    const loginCredentials = {
       username: username,
       password: password,
     };
 
     axios
-      .post(url + "rest-auth/login/", loginCredntials)
+      .post(url + "rest-auth/login/", loginCredentials)
       .then((response) => {
         if (response.status == 200) {
           sessionStorage.setItem("authToken", response.data.key);
