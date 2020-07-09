@@ -2,8 +2,8 @@ import React, { useReducer, createContext } from "react";
 
 const initialData = {
   searchField: "",
-  user: "",
-  authToken: {},
+  user: {},
+  authToken: "",
 };
 
 export const CapitalizerContext = createContext([initialData, () => {}]);

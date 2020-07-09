@@ -6,6 +6,7 @@ import { CapitalizerProvider } from "./Context";
 import { StockPage } from "./Stocks/Stocks";
 import { ProfilePage } from "./Profile/Profile";
 import { LogInPage } from "./LogIn/LogIn";
+import { AuthToken } from "./components/AuthToken";
 import "./App.css";
 
 function App() {
@@ -14,14 +15,17 @@ function App() {
       <Router>
         <Route exact path="/" component={LogInPage}/>
         <Route path="/stocks">
+          <AuthToken></AuthToken>
           <NavBar></NavBar>
           <StockPage></StockPage>
         </Route>
         <Route path="/dashboard">
+          <AuthToken></AuthToken>
           <NavBar></NavBar>
           <DashboardPage></DashboardPage>
         </Route>
         <Route path="/profile">
+          <AuthToken></AuthToken>
           <NavBar></NavBar>
           <ProfilePage></ProfilePage>
         </Route>
