@@ -23,7 +23,7 @@ export function LogInPage() {
     axios
       .post(url + "rest-auth/login/", loginCredentials)
       .then((response) => {
-        if (response.status == 200) {
+        if (response.status === 200) {
           sessionStorage.setItem("authToken", response.data.key);
           updateContext({
             type: "update token",
