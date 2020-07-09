@@ -34,15 +34,19 @@ export function ProfilePage() {
         })
         .then((response) => {
           const possibleInterests = response.data;
-          let entries = []
+          let entries = [];
 
-          for(var interest in possibleInterests){
-            if(context.user["interests"].includes(possibleInterests[interest]["id"])){
-              entries = [...entries, possibleInterests[interest]["interest"]]
+          for (var interest in possibleInterests) {
+            if (
+              context.user["interests"].includes(
+                possibleInterests[interest]["id"]
+              )
+            ) {
+              entries = [...entries, possibleInterests[interest]["interest"]];
             }
           }
 
-          updateState(entries)
+          updateState(entries);
         });
     }
   }, [context.authToken, context.user]);
