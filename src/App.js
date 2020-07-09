@@ -14,7 +14,10 @@ function App() {
   return (
     <CapitalizerProvider>
       <Router>
-        <Route exact path="/" component={LogInPage}/>
+        <Route exact path="/">
+          <NonauthNavBar></NonauthNavBar>
+          <LogInPage></LogInPage>
+        </Route>
         <Route path="/signup">
           <NonauthNavBar></NonauthNavBar>
           <SignupPage></SignupPage>
