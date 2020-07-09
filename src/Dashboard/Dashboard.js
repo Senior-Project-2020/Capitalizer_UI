@@ -4,87 +4,46 @@ import { DashBoardTable } from "../components/DashboardTable";
 import { CapitalizerContext } from "../Context";
 import axios from "axios";
 
+const url = "http://localhost:8000/api/v1/";
+
 export function DashboardPage() {
     const [context,] = useContext(CapitalizerContext);
     const [buyTable, setBuyTable] = useState(false);
     const [sellTable, setSellTable] = useState(false);
 
-    //const blankPriceList = [
-    //    { 'id': 0, 'stock': "BLANK", 'date': new Date("2020-01-01"), 'predicted_closing_price': 100, 'opening_price': 100, 'actual_closing_price': 100, 'daily_high': 100, 'daily_low': 100, 'volume': 10000 },
-    //    { 'id': 1, 'stock': "BLANK", 'date': new Date("2020-01-02"), 'predicted_closing_price': 100, 'opening_price': 100, 'actual_closing_price': 200, 'daily_high': 100, 'daily_low': 100, 'volume': 10000 },
-    //    { 'id': 2, 'stock': "BLANK", 'date': new Date("2020-01-03"), 'predicted_closing_price': 100, 'opening_price': 100, 'actual_closing_price': 500, 'daily_high': 100, 'daily_low': 100, 'volume': 10000 },
-    //    { 'id': 3, 'stock': "BLANK", 'date': new Date("2020-01-04"), 'predicted_closing_price': 100, 'opening_price': 100, 'actual_closing_price': 300, 'daily_high': 100, 'daily_low': 100, 'volume': 10000 },
-    //    { 'id': 4, 'stock': "BLANK", 'date': new Date("2020-01-05"), 'predicted_closing_price': 100, 'opening_price': 100, 'actual_closing_price': 400, 'daily_high': 100, 'daily_low': 100, 'volume': 10000 },
-    //];
-
-    const getPrices = (stockObjs, stateUpdateFunc) => {
-        const stocks = [];
-        const stockPromises = [];
-        // Iterate over the top 5 stocks
-        for(let i = 0; i < 5; i++){
-            const priceIndices = stockObjs[i].stock_prices;
-            const pricePromises = [];  // Array of response promises
-
-            if (priceIndices.length > 4){   // Check to make sure the stock has at least 5 prices recorded
-                const prices = [];
-
-                // Iterate over the 5 most recent stock prices
-                for(let j = priceIndices.length - 1; j > priceIndices.length - 6; j--){
-                    
-                    // Send async requests, add promise for result to the pricePromises array
-                    pricePromises.push(
-                        axios.get("http://localhost:8000/api/v1/stock-price/" + priceIndices[j], {headers: {Authorization: "Token " + context.authToken}}).then((resp) => {
-                            if (resp.status === 200){
-                                prices.push(resp.data);
-                            }
-                        }).catch((err) => {
-                            console.log(err);
-                        })
-                    );
-                }
-                stockPromises.push(
-                    // Wait for all price promises to resolve
-                    Promise.allSettled(pricePromises).then((results) => {
-
-                        // Combine price data with the stock data and add to the stocks array
-                        stocks.push({stock: stockObjs[i], prices: cleanPricesArray(prices)});
-                    })
-                );
-            }
-        }
-        // Wait for all stocks to get all prices
-        Promise.allSettled(stockPromises).then(() => {
-            
-            // Update the state with a new table with the new data
-            stateUpdateFunc(<DashBoardTable stocks={stocks}></DashBoardTable>);
-        })
-    }
-
+    // Pull data for both tables on the dashboard
     useEffect(() => {
-        axios.get("http://localhost:8000/api/v1/stock/", {headers: {Authorization: "Token " + context.authToken}}).then((response) => {
-            // On success response, get the stock prices for these stocks
-            if (response.status === 200){
-                getPrices(response.data, setBuyTable);
-            }
-            else{
-                console.error("Error getting stocks: " + response.status + ": " + response.statusText);
-            }
-        }).catch((err) => {
-            console.error("Error getting stocks: " + err);
-        });
+        const now = new Date("2020", "06", "05");//new Date(); // TODO: Remove static date
+        // Convert date to format for get request parameter
+        const suggestionDate = now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, '0') + "-" + String(now.getDate()).padStart(2, '0');
+        
+        // Get the suggestions from the api
+        axios.get(url + "suggestion/?date=" + suggestionDate, {headers: {Authorization: "Token " + context.authToken}}).then((response) => {
+            // Sort the suggestions based on the predicted percent change
+            const suggestions = response.data.suggestions.sort((s1, s2) => {
+                return s1.percent_change - s2.percent_change;
+            });
 
-        axios.get("http://localhost:8000/api/v1/stock/", {headers: {Authorization: "Token " + context.authToken}}).then((response) => {
-            // On success response, get the stock prices for these stocks
-            if (response.status === 200){
-                getPrices(response.data, setSellTable);
+            // Display the top/bottom 5 stocks with best/worst predicted percent change
+            // Populate the respective table with the data
+
+            // 5 stocks with the best predicted closing; highest percent change
+            const topStocks = []
+            for (let i = suggestions.length - 1; i > suggestions.length - 6; i--){
+                topStocks.push(response.data.suggestions[i].stock);
             }
-            else{
-                console.error("Error getting stocks: " + response.status + ": " + response.statusText);
+            populateTable(topStocks, setBuyTable, context.authToken);
+            
+            // 5 stocks with the worst predicted closing; lowest percent change
+            const bottomStocks = [];
+            for (let i = 0; i < 5; i++){
+                bottomStocks.push(response.data.suggestions[i].stock);
             }
+            populateTable(bottomStocks, setSellTable, context.authToken);
         }).catch((err) => {
-            console.error("Error getting stocks: " + err);
-        });
-    }, []);
+            console.error("Error connecting to server: " + err);
+        })
+    }, [context.authToken]);
     
     
     const user = "USER"; // TODO: Pull from user data in context
@@ -95,11 +54,11 @@ export function DashboardPage() {
                 style={{ "marginTop": "3%" }}
             >
                 <WelcomeMessage>Hello, {user}</WelcomeMessage>
-                <BuySellMessage>Here are our suggested buys for you today...</BuySellMessage>
+                <BuySellMessage>Here are the top performing stock predictions for today...</BuySellMessage>
             </header>
             {buyTable ? buyTable : <div></div>}
             <header>
-                <BuySellMessage>And here are the stocks we would avoid or sell...</BuySellMessage>
+                <BuySellMessage>And here are the bottom performing stock predictions for today...</BuySellMessage>
             </header>
             {sellTable ? sellTable : <div></div>}
         </section>
@@ -119,6 +78,76 @@ const BuySellMessage = styled.p`
     color: white;
     text-align: center;
 `;
+
+const populateTable = (stockSymbols, stateUpdateFunc, apiToken) => {
+    const stocks = []
+    const stockPromises = [];
+
+    // Get the stock data from the API using the given symbols
+    for (let i = 0; i < stockSymbols.length; i++){
+        stockPromises.push(
+            axios.get(url + "stock/" + stockSymbols[i], {headers: {Authorization: "Token " + apiToken}}).then((response) => {
+                if (response.status === 200){
+                    // Add the data to the stocks array
+                    stocks.push(response.data);
+                }
+                else{
+                    console.error("Error getting stock (" + stockSymbols[i].stock + "): " + response.status + ": " + response.statusText);
+                }
+            }).catch((err) => {
+                console.error("Error getting stock (" + stockSymbols[i].stock + "): " + err);
+            })
+        );
+    }
+    // When all stock data resolves
+    Promise.allSettled(stockPromises).then(() => {
+        // Get the price data for each stock
+        getPrices(stocks, stateUpdateFunc, apiToken);
+    });
+}
+
+const getPrices = (stockObjs, stateUpdateFunc, apiToken) => {
+    const stocks = [];
+    const stockPromises = [];
+    // Iterate over the stock objects
+    for(let i = 0; i < stockObjs.length; i++){
+        const priceIndices = stockObjs[i].stock_prices;
+        const pricePromises = [];  // Array of response promises
+
+        if (priceIndices.length > 4){   // Check to make sure the stock has at least 5 prices recorded
+            const prices = [];
+
+            // Iterate over the 5 most recent stock prices
+            for(let j = priceIndices.length - 1; j > priceIndices.length - 6; j--){
+                
+                // Send async requests, add promise for result to the pricePromises array
+                pricePromises.push(
+                    axios.get(url + "stock-price/" + priceIndices[j], {headers: {Authorization: "Token " + apiToken}}).then((resp) => {
+                        if (resp.status === 200){
+                            prices.push(resp.data);
+                        }
+                    }).catch((err) => {
+                        console.error(err);
+                    })
+                );
+            }
+            stockPromises.push(
+                // Wait for all price promises to resolve
+                Promise.allSettled(pricePromises).then((results) => {
+
+                    // Combine price data with the stock data and add to the stocks array
+                    stocks.push({stock: stockObjs[i], prices: cleanPricesArray(prices)});
+                })
+            );
+        }
+    }
+    // Wait for all stocks to get all prices
+    Promise.allSettled(stockPromises).then(() => {
+        
+        // Update the state with a new table with the new data
+        stateUpdateFunc(<DashBoardTable stocks={stocks}></DashBoardTable>);
+    })
+}
 
 const cleanPricesArray = (prices) => {
     // Convert strings of floats to floats
