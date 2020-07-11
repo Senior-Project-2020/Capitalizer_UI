@@ -10,8 +10,8 @@ export function StockTab({ stock, predictedClosing, previousClosing, isSelected,
     let style;
 
     if (isTop){
-        // If on top, add radius to top left corner
-        style = { ...style, "borderRadius": "15px 0px 0px 0px"}
+        // If on top, add radius to top left corner and remove border from top edge
+        style = { ...style, "borderRadius": "15px 0px 0px 0px", "borderWidth": "0px 1px 1px 0px"};
     }
 
     if (isSelected){
@@ -21,6 +21,11 @@ export function StockTab({ stock, predictedClosing, previousClosing, isSelected,
             "background": "rgba(255, 255, 255, 0.30)",
             "borderRadius": "10px 0px 0px 10px"
         };
+
+        if(isTop){
+            // If on top, remove border from top edge
+            style = { ...style, "borderWidth": "0px 1px 1px 0px"};
+        }
     }
 
     return (
