@@ -109,38 +109,21 @@ const populateTable = (stockSymbols, stateUpdateFunc, apiToken) => {
 const getPrices = (stockObjs, stateUpdateFunc, apiToken) => {
     const stocks = [];
     const stockPromises = [];
+
     // Iterate over the stock objects
     for(let i = 0; i < stockObjs.length; i++){
-        const priceIndices = stockObjs[i].stock_prices;
-        const pricePromises = [];  // Array of response promises
-
-        if (priceIndices.length > 4){   // Check to make sure the stock has at least 5 prices recorded
-            const prices = [];
-
-            // Iterate over the 5 most recent stock prices
-            for(let j = priceIndices.length - 1; j > priceIndices.length - 6; j--){
-                
-                // Send async requests, add promise for result to the pricePromises array
-                pricePromises.push(
-                    axios.get(url + "stock-price/" + priceIndices[j], {headers: {Authorization: "Token " + apiToken}}).then((resp) => {
-                        if (resp.status === 200){
-                            prices.push(resp.data);
-                        }
-                    }).catch((err) => {
-                        console.error(err);
-                    })
-                );
-            }
-            stockPromises.push(
-                // Wait for all price promises to resolve
-                Promise.allSettled(pricePromises).then((results) => {
-
+        stockPromises.push(
+            axios.get(url + "stock-price/", {headers: {Authorization: "Token " + apiToken}, params: {"recent": stockObjs[i].symbol}}).then((resp) => {
+                if (resp.status === 200){
                     // Combine price data with the stock data and add to the stocks array
-                    stocks.push({stock: stockObjs[i], prices: cleanPricesArray(prices)});
-                })
-            );
-        }
+                    stocks.push({stock: stockObjs[i], prices: cleanPricesArray(resp.data.results)});
+                }
+            }).catch((err) => {
+                console.error(err);
+            })
+        );
     }
+    
     // Wait for all stocks to get all prices
     Promise.allSettled(stockPromises).then(() => {
         
