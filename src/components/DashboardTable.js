@@ -12,10 +12,13 @@ export function DashBoardTable({ stocks }) {
 
     // Sort stocks based on percent change (of last element in the prices array)
     stocks.sort((s1, s2) => {
-        const price1 = s1.prices[s1.prices.length - 1]
-        const price2 = s2.prices[s2.prices.length - 1]
-        const percentChange1 = (price1.predicted_closing_price - price1.opening_price) / price1.opening_price * 100;
-        const percentChange2 = (price2.predicted_closing_price - price2.opening_price) / price2.opening_price * 100;
+        const price1Actual = s1.prices[s1.prices.length - 2].actual_closing_price;
+        const price1Predicted = s1.prices[s1.prices.length - 1].predicted_closing_price;
+        const price2Actual = s2.prices[s2.prices.length - 2].actual_closing_price;
+        const price2Predicted = s2.prices[s2.prices.length - 1].predicted_closing_price;
+
+        const percentChange1 = (price1Predicted - price1Actual) / price1Actual * 100;
+        const percentChange2 = (price2Predicted - price2Actual) / price2Actual * 100;
 
         return percentChange2 - percentChange1;
     });
@@ -26,7 +29,8 @@ export function DashBoardTable({ stocks }) {
             <StockTab 
                 key={i}
                 stock={stocks[i].stock} 
-                price={stocks[i].prices[stocks[i].prices.length - 1]} 
+                predictedClosing={stocks[i].prices[stocks[i].prices.length - 1].predicted_closing_price}
+                previousClosing={stocks[i].prices[stocks[i].prices.length - 2].actual_closing_price} 
                 isSelected={selectedTab === stocks[i].stock.symbol} 
                 isTop={i === 0}
                 setSelectedTab={setSelectedTab}
@@ -36,12 +40,14 @@ export function DashBoardTable({ stocks }) {
 
     // Get the closing price data. Only get the predicted closing price of the last price in the list
     const data = [];
+    let predictedChange = 0;
     for (let i = 0; i < selectedStock.prices.length; i++){
         if (i === selectedStock.prices.length - 1){
             data.push({
                 x: selectedStock.prices[i].date,
                 y: selectedStock.prices[i].predicted_closing_price,
             });
+            predictedChange = selectedStock.prices[i].predicted_closing_price - selectedStock.prices[i-1].actual_closing_price;
         }
         else {
             data.push({
@@ -58,7 +64,7 @@ export function DashBoardTable({ stocks }) {
                 <GraphContainer>
                     <AreaGraph 
                         data={data} 
-                        positiveColor={Number(data[data.length - 1].y) >= Number(data[data.length - 2].y)}
+                        positiveColor={predictedChange >= 0}
                     ></AreaGraph>
                 </GraphContainer>
             </TopContainer>

@@ -2,9 +2,9 @@ import React from "react";
 import PropTypes from 'prop-types';
 import styled from "styled-components";
 
-export function StockTab({ stock, price, isSelected, isTop, setSelectedTab }) {
-    const change = price.predicted_closing_price - price.opening_price;
-    const percentChange = change / price.opening_price * 100;
+export function StockTab({ stock, predictedClosing, previousClosing, isSelected, isTop, setSelectedTab }) {
+    const change = predictedClosing - previousClosing;
+    const percentChange = change / previousClosing * 100;
 
     // Update tab container's style depending on isSelected and isTop props
     let style;
@@ -33,14 +33,14 @@ export function StockTab({ stock, price, isSelected, isTop, setSelectedTab }) {
                 <tbody>
                     <tr>
                         <SymbolHeader stockSymbol={stock.symbol}></SymbolHeader>
-                        <TableHeader label={"Opening:"}></TableHeader>
-                        <TableHeader label={"Predicted:"}></TableHeader>
+                        <TableHeader label={"Previous Closing:"}></TableHeader>
+                        <TableHeader label={"Predicted Closing:"}></TableHeader>
                         <TableHeaderGap></TableHeaderGap>
-                        <TableHeader label={"Change:"}></TableHeader>
+                        <TableHeader label={"Predicted Change:"}></TableHeader>
                     </tr>
                     <tr>
-                        <TableData data={"$" + price.opening_price.toFixed(2)}></TableData>
-                        <TableData data={"$" + price.predicted_closing_price.toFixed(2)}></TableData>
+                        <TableData data={"$" + previousClosing.toFixed(2)}></TableData>
+                        <TableData data={"$" + predictedClosing.toFixed(2)}></TableData>
                         <TableData data={"$" + change.toFixed(2) + " (" + percentChange.toFixed(2) + "%)"}></TableData>
                     </tr>
                 </tbody>
@@ -53,10 +53,8 @@ StockTab.propTypes = {
     stock: PropTypes.shape({
         symbol: PropTypes.string,
     }).isRequired,
-    price: PropTypes.shape({
-        opening_price: PropTypes.number,
-        predicted_closing_price: PropTypes.number,
-    }).isRequired,
+    predictedClosing: PropTypes.number.isRequired,
+    previousClosing: PropTypes.number.isRequired,
     isSelected: PropTypes.bool.isRequired,
     isTop: PropTypes.bool.isRequired,
 }
