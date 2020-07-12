@@ -1,9 +1,28 @@
-import React from "react";
+import React, { useContext } from "react";
+import { useHistory } from "react-router";
 import styled from "styled-components";
+import { CapitalizerContext } from "../Context";
+
+const url = "http://54.198.60.36/api/v1/";
 
 export function LogOutButton() {
-  // TODO: Implement on click
-  return <Button>Log Out</Button>;
+  const history = useHistory();
+  const [context, updateContext] = useContext(CapitalizerContext);
+  
+  return (
+    <Button
+      onClick={() => {
+        sessionStorage.setItem("authToken", "");
+        updateContext({
+          type: "update token",
+          token: "",
+        });
+        history.push("/");
+      }}
+    >
+      Log Out
+    </Button>
+  );
 }
 
 export function LogInButton({ handleClick }) {
