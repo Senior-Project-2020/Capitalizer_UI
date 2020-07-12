@@ -229,29 +229,3 @@ const getSuggestionDate = () => {
     // Convert date to format for get request parameter
     return now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, '0') + "-" + String(now.getDate()).padStart(2, '0');
 }
-
-//const BlankTable = () => {
-//    const blankStocks = [
-//        { "name": "BLANK Inc.", "symbol": "BLANK0", "category": "None", "stock_prices": [0, 1, 2, 3, 4] },
-//        { "name": "BLANK Inc.", "symbol": "BLANK1", "category": "None", "stock_prices": [0, 1, 2, 3, 4] },
-//        { "name": "BLANK Inc.", "symbol": "BLANK2", "category": "None", "stock_prices": [0, 1, 2, 3, 4] },
-//        { "name": "BLANK Inc.", "symbol": "BLANK3", "category": "None", "stock_prices": [0, 1, 2, 3, 4] },
-//        { "name": "BLANK Inc.", "symbol": "BLANK4", "category": "None", "stock_prices": [0, 1, 2, 3, 4] },
-//    ];
-//    const blankPriceList = [
-//        { 'id': 0, 'stock': "BLANK", 'date': new Date("2020-01-01"), 'predicted_closing_price': 100, 'opening_price': 100, 'actual_closing_price': 100, 'daily_high': 100, 'daily_low': 100, 'volume': 10000 },
-//        { 'id': 1, 'stock': "BLANK", 'date': new Date("2020-01-02"), 'predicted_closing_price': 100, 'opening_price': 100, 'actual_closing_price': 100, 'daily_high': 100, 'daily_low': 100, 'volume': 10000 },
-//        { 'id': 2, 'stock': "BLANK", 'date': new Date("2020-01-03"), 'predicted_closing_price': 100, 'opening_price': 100, 'actual_closing_price': 100, 'daily_high': 100, 'daily_low': 100, 'volume': 10000 },
-//        { 'id': 3, 'stock': "BLANK", 'date': new Date("2020-01-04"), 'predicted_closing_price': 100, 'opening_price': 100, 'actual_closing_price': 100, 'daily_high': 100, 'daily_low': 100, 'volume': 10000 },
-//        { 'id': 4, 'stock': "BLANK", 'date': new Date("2020-01-05"), 'predicted_closing_price': 100, 'opening_price': 100, 'actual_closing_price': 100, 'daily_high': 100, 'daily_low': 100, 'volume': 10000 },
-//    ];
-//    const stocks = [
-//        {stock: blankStocks[0], prices: blankPriceList},
-//        {stock: blankStocks[1], prices: blankPriceList},
-//        {stock: blankStocks[2], prices: blankPriceList},
-//        {stock: blankStocks[3], prices: blankPriceList},
-//        {stock: blankStocks[4], prices: blankPriceList},
-//    ];
-//
-//    return <DashBoardTable stocks={stocks}></DashBoardTable>
-//}
