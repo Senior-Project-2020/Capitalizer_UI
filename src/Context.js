@@ -2,9 +2,9 @@ import React, { useReducer, createContext } from "react";
 
 const initialData = {
   searchField: "",
-  authToken: "f9e3e97bc834ee1edee7a26e98b78f07c0e4fb9e",
   topStocks: "",
   bottomStocks: "",
+  authToken: "",
 };
 
 export const CapitalizerContext = createContext([initialData, () => {}]);

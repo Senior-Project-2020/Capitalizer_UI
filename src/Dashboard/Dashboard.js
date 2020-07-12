@@ -4,7 +4,7 @@ import { DashBoardTable, BlankTable } from "../components/DashboardTable";
 import { CapitalizerContext } from "../Context";
 import axios from "axios";
 
-const url = "http://localhost:8000/api/v1/";
+const url = "http://54.198.60.36/api/v1/";
 
 export function DashboardPage() {
     const [context, updateContext] = useContext(CapitalizerContext);
