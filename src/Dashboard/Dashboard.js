@@ -2,9 +2,8 @@ import React, { useContext, useEffect } from "react";
 import styled from "styled-components";
 import { DashBoardTable, BlankTable } from "../components/DashboardTable";
 import { CapitalizerContext } from "../Context";
+import { apiURL } from "../constants";
 import axios from "axios";
-
-const url = "http://54.198.60.36/api/v1/";
 
 export function DashboardPage() {
     const [context, updateContext] = useContext(CapitalizerContext);
@@ -19,7 +18,7 @@ export function DashboardPage() {
             const suggestionDate = getSuggestionDate();
 
             // Get the suggestions from the api
-            axios.get(url + "suggestion/?date=" + suggestionDate, { headers: { Authorization: "Token " + context.authToken } }).then((response) => {
+            axios.get(apiURL + "suggestion/?date=" + suggestionDate, { headers: { Authorization: "Token " + context.authToken } }).then((response) => {
                 // Sort the suggestions based on the predicted percent change
                 const suggestions = response.data.suggestions.sort((s1, s2) => {
                     return s1.percent_change - s2.percent_change;
@@ -57,7 +56,7 @@ export function DashboardPage() {
             const suggestionDate = getSuggestionDate();
 
             // Get the suggestions from the api
-            axios.get(url + "suggestion/?date=" + suggestionDate, { headers: { Authorization: "Token " + context.authToken } }).then((response) => {
+            axios.get(apiURL + "suggestion/?date=" + suggestionDate, { headers: { Authorization: "Token " + context.authToken } }).then((response) => {
                 // Sort the suggestions based on the predicted percent change
                 const suggestions = response.data.suggestions.sort((s1, s2) => {
                     return s1.percent_change - s2.percent_change;
@@ -128,7 +127,7 @@ const populateTable = (stockSymbols, stateUpdateFunc, apiToken) => {
     // Get the stock data from the API using the given symbols
     for (let i = 0; i < stockSymbols.length; i++){
         stockPromises.push(
-            axios.get(url + "stock/" + stockSymbols[i], {headers: {Authorization: "Token " + apiToken}}).then((response) => {
+            axios.get(apiURL + "stock/" + stockSymbols[i], {headers: {Authorization: "Token " + apiToken}}).then((response) => {
                 if (response.status === 200){
                     // Add the data to the stocks array
                     stocks.push(response.data);
@@ -155,7 +154,7 @@ const getPrices = (stockObjs, stateUpdateFunc, apiToken) => {
     // Iterate over the stock objects
     for(let i = 0; i < stockObjs.length; i++){
         stockPromises.push(
-            axios.get(url + "stock-price/", {headers: {Authorization: "Token " + apiToken}, params: {"recent": stockObjs[i].symbol}}).then((resp) => {
+            axios.get(apiURL + "stock-price/", {headers: {Authorization: "Token " + apiToken}, params: {"recent": stockObjs[i].symbol}}).then((resp) => {
                 if (resp.status === 200){
                     // Combine price data with the stock data and add to the stocks array
                     stocks.push({stock: stockObjs[i], prices: cleanPricesArray(resp.data.results)});
