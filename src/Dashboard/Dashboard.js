@@ -13,7 +13,7 @@ export function DashboardPage() {
     // Pull data for the top stocks table on the dashboard
     useEffect(() => {
         // Only run if top stocks are empty
-        if (context.topStocks === "") {
+        if (context.topStocks === "" && context.authToken !== "") {
             // Get the date to pull stock data from
             const suggestionDate = getSuggestionDate();
 
@@ -51,7 +51,7 @@ export function DashboardPage() {
     // Pull data for the bottom stocks table on the dashboard
     useEffect(() => {
         // Only run if bottom stocks are empty
-        if (context.bottomStocks === "") {
+        if (context.bottomStocks === "" && context.authToken !== "") {
             // Get the date to pull stock data from
             const suggestionDate = getSuggestionDate();
 
