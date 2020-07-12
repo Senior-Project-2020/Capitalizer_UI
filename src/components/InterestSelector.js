@@ -3,9 +3,7 @@ import styled from "styled-components";
 import { CheckSelected, CheckUnSelected } from "../icons/CheckBox";
 import { Categories } from "../constants";
 
-export function InterestSelector() {
-  //TODO take state from parent so the values can be updated from the api call
-  const [selectedEntries, updateState] = useState([]);
+export function InterestSelector({selectedEntries, updateState}) {
   const Interests = [];
 
   for (const [index, value] of Categories.entries()) {
