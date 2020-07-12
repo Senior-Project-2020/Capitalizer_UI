@@ -7,42 +7,85 @@ import axios from "axios";
 const url = "http://localhost:8000/api/v1/";
 
 export function DashboardPage() {
-    const [context,] = useContext(CapitalizerContext);
-    const [buyTable, setBuyTable] = useState(false);
-    const [sellTable, setSellTable] = useState(false);
+    const [context, updateContext] = useContext(CapitalizerContext);
+    let buyTable = context.topStocks !== "" ? <DashBoardTable stocks={context.topStocks}></DashBoardTable> : <div></div>;
+    let sellTable = context.bottomStocks !== "" ? <DashBoardTable stocks={context.bottomStocks}></DashBoardTable> : <div></div>;
 
-    // Pull data for both tables on the dashboard
+    // Pull data for the top stocks table on the dashboard
     useEffect(() => {
-        // Get the date to pull stock data from
-        const suggestionDate = getSuggestionDate();
-        
-        // Get the suggestions from the api
-        axios.get(url + "suggestion/?date=" + suggestionDate, {headers: {Authorization: "Token " + context.authToken}}).then((response) => {
-            // Sort the suggestions based on the predicted percent change
-            const suggestions = response.data.suggestions.sort((s1, s2) => {
-                return s1.percent_change - s2.percent_change;
-            });
+        // Only run if top stocks are empty
+        if (context.topStocks === "") {
+            // Get the date to pull stock data from
+            const suggestionDate = getSuggestionDate();
 
-            // Display the top/bottom 5 stocks with best/worst predicted percent change
-            // Populate the respective table with the data
+            // Get the suggestions from the api
+            axios.get(url + "suggestion/?date=" + suggestionDate, { headers: { Authorization: "Token " + context.authToken } }).then((response) => {
+                // Sort the suggestions based on the predicted percent change
+                const suggestions = response.data.suggestions.sort((s1, s2) => {
+                    return s1.percent_change - s2.percent_change;
+                });
 
-            // 5 stocks with the best predicted closing; highest percent change
-            const topStocks = []
-            for (let i = suggestions.length - 1; i > suggestions.length - 6; i--){
-                topStocks.push(response.data.suggestions[i].stock);
-            }
-            populateTable(topStocks, setBuyTable, context.authToken);
-            
-            // 5 stocks with the worst predicted closing; lowest percent change
-            const bottomStocks = [];
-            for (let i = 0; i < 5; i++){
-                bottomStocks.push(response.data.suggestions[i].stock);
-            }
-            populateTable(bottomStocks, setSellTable, context.authToken);
-        }).catch((err) => {
-            console.error("Error connecting to server: " + err);
-        })
-    }, [context.authToken]);
+                // Display the top 5 stocks with best predicted percent change
+                // Populate the respective table with the data
+
+                // 5 stocks with the best predicted closing; highest percent change
+                const topStocks = []
+                for (let i = suggestions.length - 1; i > suggestions.length - 6; i--) {
+                    topStocks.push(response.data.suggestions[i].stock);
+                }
+                populateTable(
+                    topStocks,
+                    (data) => {
+                        updateContext({
+                            type: "update top stocks",
+                            topStocks: data,
+                        })
+                    },
+                    context.authToken
+                );
+            }).catch((err) => {
+                console.error("Error connecting to server: " + err);
+            })
+        }
+    }, [context.authToken, context.topStocks]);
+
+    // Pull data for the bottom stocks table on the dashboard
+    useEffect(() => {
+        // Only run if bottom stocks are empty
+        if (context.bottomStocks === "") {
+            // Get the date to pull stock data from
+            const suggestionDate = getSuggestionDate();
+
+            // Get the suggestions from the api
+            axios.get(url + "suggestion/?date=" + suggestionDate, { headers: { Authorization: "Token " + context.authToken } }).then((response) => {
+                // Sort the suggestions based on the predicted percent change
+                const suggestions = response.data.suggestions.sort((s1, s2) => {
+                    return s1.percent_change - s2.percent_change;
+                });
+
+                // Display the bottom 5 stocks with worst predicted percent change
+                // Populate the respective table with the data
+
+                // 5 stocks with the worst predicted closing; lowest percent change
+                const bottomStocks = [];
+                for (let i = 0; i < 5; i++) {
+                    bottomStocks.push(response.data.suggestions[i].stock);
+                }
+                populateTable(
+                    bottomStocks,
+                    (data) => {
+                        updateContext({
+                            type: "update bottom stocks",
+                            bottomStocks: data,
+                        })
+                    },
+                    context.authToken
+                );
+            }).catch((err) => {
+                console.error("Error connecting to server: " + err);
+            })
+        }
+    }, [context.authToken, context.bottomStocks]);
     
     
     const user = "USER"; // TODO: Pull from user data in context
@@ -55,11 +98,11 @@ export function DashboardPage() {
                 <WelcomeMessage>Hello, {user}</WelcomeMessage>
                 <BuySellMessage>Here are the top performing stock predictions for today...</BuySellMessage>
             </header>
-            {buyTable ? buyTable : <div></div>}
+            {buyTable}
             <header>
                 <BuySellMessage>And here are the bottom performing stock predictions for today...</BuySellMessage>
             </header>
-            {sellTable ? sellTable : <div></div>}
+            {sellTable}
         </section>
     );
 }
@@ -127,7 +170,7 @@ const getPrices = (stockObjs, stateUpdateFunc, apiToken) => {
     Promise.allSettled(stockPromises).then(() => {
         
         // Update the state with a new table with the new data
-        stateUpdateFunc(<DashBoardTable stocks={stocks}></DashBoardTable>);
+        stateUpdateFunc(stocks);
     })
 }
 
