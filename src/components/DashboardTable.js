@@ -71,7 +71,7 @@ export function DashBoardTable({ stocks }) {
             <DetailContainer>
                 <StockDetail 
                     stock={selectedStock.stock} 
-                    price={selectedStock.prices[selectedStock.prices.length - 1]}
+                    price={selectedStock.prices[selectedStock.prices.length - 2]}
                 ></StockDetail>
             </DetailContainer>
         </DashBoardTableContainer>

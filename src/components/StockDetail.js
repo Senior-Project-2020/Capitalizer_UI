@@ -5,9 +5,10 @@ import { useHistory } from "react-router";
 import { StockInfo } from "./StockInfo";
 
 export function StockDetail({ stock, price }) {
+    const headerData = { ...stock, date: price['date']};
     return (
         <StockDetailContainer>
-            <DetailHeader data={stock}></DetailHeader>
+            <DetailHeader data={headerData}></DetailHeader>
             <InfoContainer>
                 <StockInfo data={price}></StockInfo>
             </InfoContainer>
@@ -29,6 +30,9 @@ const StockDetailContainer = styled.div`
 
 const HeaderContainer = styled.header`
     font-size: 35px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
 `;
 
 const InfoContainer = styled.div`
@@ -44,20 +48,26 @@ const LinkWrapper = styled.div`
     }
 `;
 
+const DateWrapper = styled.div`
+    font-size: 20px;
+`;
+
 const DetailHeader = ({ data }) => {
     return (
         <HeaderContainer>
             <Link path={"/stocks/" + data["symbol"]}>
                 {data["name"] + " (" + data["symbol"] + ")"}
             </Link>
+            <DateWrapper>Data from: {data['date'].toDateString()}</DateWrapper>
         </HeaderContainer>
     );
 }
 
 DetailHeader.propTypes = {
     data: PropTypes.shape({
-        name: PropTypes.string,
-        symbol: PropTypes.string,
+        name: PropTypes.string.isRequired,
+        symbol: PropTypes.string.isRequired,
+        date: PropTypes.instanceOf(Date).isRequired,
     }).isRequired,
 }
 
