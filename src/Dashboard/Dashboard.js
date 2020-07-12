@@ -13,9 +13,8 @@ export function DashboardPage() {
 
     // Pull data for both tables on the dashboard
     useEffect(() => {
-        const now = new Date("2020", "06", "05");//new Date(); // TODO: Remove static date
-        // Convert date to format for get request parameter
-        const suggestionDate = now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, '0') + "-" + String(now.getDate()).padStart(2, '0');
+        // Get the date to pull stock data from
+        const suggestionDate = getSuggestionDate();
         
         // Get the suggestions from the api
         axios.get(url + "suggestion/?date=" + suggestionDate, {headers: {Authorization: "Token " + context.authToken}}).then((response) => {
@@ -159,6 +158,19 @@ const cleanPricesArray = (prices) => {
     });
 
     return prices;
+}
+
+const getSuggestionDate = () => {
+    let now = new Date();
+    // If saturday or sunday, set now to be friday
+    if (now.getDay() === 0){
+        now = new Date(now.setDate(now.getDate() - 2));
+    }
+    else if (now.getDay() === 6){
+        now = new Date(now.setDate(now.getDate() - 1));
+    }
+    // Convert date to format for get request parameter
+    return now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, '0') + "-" + String(now.getDate()).padStart(2, '0');
 }
 
 //const BlankTable = () => {
