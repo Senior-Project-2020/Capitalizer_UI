@@ -5,6 +5,7 @@ const initialData = {
   topStocks: "",
   bottomStocks: "",
   authToken: "",
+  user: {},
 };
 
 export const CapitalizerContext = createContext([initialData, () => {}]);
@@ -22,6 +23,9 @@ function capitalizerReducer(state, action) {
     }
     case "update token": {
       return { ...state, authToken: action.token};
+    }
+    case "update user": {
+      return { ...state, user: action.user};
     }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);
