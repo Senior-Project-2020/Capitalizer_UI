@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import styled from "styled-components";
 import { DashBoardTable, BlankTable } from "../components/DashboardTable";
 import { CapitalizerContext } from "../Context";
@@ -31,7 +31,7 @@ export function DashboardPage() {
                 // 5 stocks with the best predicted closing; highest percent change
                 const topStocks = []
                 for (let i = suggestions.length - 1; i > suggestions.length - 6; i--) {
-                    topStocks.push(response.data.suggestions[i].stock);
+                    topStocks.push(suggestions[i].stock);
                 }
                 populateTable(
                     topStocks,
@@ -47,7 +47,7 @@ export function DashboardPage() {
                 console.error("Error connecting to server: " + err);
             })
         }
-    }, [context.authToken, context.topStocks]);
+    }, [context.authToken, context.topStocks, updateContext]);
 
     // Pull data for the bottom stocks table on the dashboard
     useEffect(() => {
@@ -69,7 +69,7 @@ export function DashboardPage() {
                 // 5 stocks with the worst predicted closing; lowest percent change
                 const bottomStocks = [];
                 for (let i = 0; i < 5; i++) {
-                    bottomStocks.push(response.data.suggestions[i].stock);
+                    bottomStocks.push(suggestions[i].stock);
                 }
                 populateTable(
                     bottomStocks,
@@ -85,7 +85,7 @@ export function DashboardPage() {
                 console.error("Error connecting to server: " + err);
             })
         }
-    }, [context.authToken, context.bottomStocks]);
+    }, [context.authToken, context.bottomStocks,updateContext]);
     
     
     const user = "USER"; // TODO: Pull from user data in context
