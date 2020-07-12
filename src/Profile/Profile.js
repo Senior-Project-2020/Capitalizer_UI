@@ -33,7 +33,7 @@ export function ProfilePage() {
           headers: { Authorization: "Token " + context.authToken },
         })
         .then((response) => {
-          const possibleInterests = response.data;
+          const possibleInterests = response.data.results;
           let entries = [];
 
           for (var interest in possibleInterests) {

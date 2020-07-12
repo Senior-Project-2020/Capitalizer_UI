@@ -12,21 +12,21 @@ export function SearchStockDetail({
   high,
   previousClose,
   volume,
-  selectedStock,
+  prices,
 }) {
   const [open, setOpen] = useState(false);
 
   const data = [];
-  for (let i = 0; i < selectedStock.prices.length; i++) {
-    if (i === selectedStock.prices.length - 1) {
+  for (let i = 0; i < prices.length; i++) {
+    if (i === prices.length - 1) {
       data.push({
-        x: selectedStock.prices[i].date,
-        y: selectedStock.prices[i].predicted_closing_price,
+        x: prices[i].date,
+        y: prices[i].predicted_closing_price,
       });
     } else {
       data.push({
-        x: selectedStock.prices[i].date,
-        y: selectedStock.prices[i].actual_closing_price,
+        x: prices[i].date,
+        y: prices[i].actual_closing_price,
       });
     }
   }
@@ -98,27 +98,19 @@ SearchStockDetail.propTypes = {
   high: PropTypes.number.isRequired,
   previousClose: PropTypes.number.isRequired,
   volume: PropTypes.number.isRequired,
-  selectedStock: PropTypes.shape({
-    stock: PropTypes.shape({
-      category: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      stock_prices: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
-      symbol: PropTypes.string.isRequired,
-    }).isRequired,
-    prices: PropTypes.arrayOf(
+  prices: PropTypes.arrayOf(
       PropTypes.shape({
-        actual_closing_price: PropTypes.number.isRequired,
-        daily_high: PropTypes.number.isRequired,
-        daily_low: PropTypes.number.isRequired,
-        date: PropTypes.instanceOf(Date).isRequired,
+        actual_closing_price: PropTypes.string.isRequired,
+        daily_high: PropTypes.string.isRequired,
+        daily_low: PropTypes.string.isRequired,
+        date: PropTypes.string.isRequired,
         id: PropTypes.number.isRequired,
-        opening_price: PropTypes.number.isRequired,
-        predicted_closing_price: PropTypes.number.isRequired,
+        opening_price: PropTypes.string.isRequired,
+        predicted_closing_price: PropTypes.string.isRequired,
         stock: PropTypes.string.isRequired,
         volume: PropTypes.number.isRequired,
       }).isRequired
     ).isRequired,
-  }).isRequired,
 };
 
 const StockDetailContainer = styled.div`

@@ -173,7 +173,7 @@ export function SmallAreaGraph({ data, positiveColor }) {
             enabled: false,
         },
         xaxis: {
-            categories: Array.from(data, d => d.x.getTime()),
+            categories: Array.from(data, d => (new Date(d.x)).getTime()),
             type: 'datetime',
             labels: {
                 offsetX: -6,
