@@ -5,7 +5,7 @@ import { StockDetail } from "./StockDetail";
 import { StockTab } from "./StockTab";
 import { AreaGraph } from "./AreaGraph";
 
-export function DashBoardTable({ stocks }) {
+export function DashBoardTable({ stocks, reverseTabs }) {
     const stockTabs = [];
     const [selectedTab, setSelectedTab] = useState(stocks[0].stock.symbol);
     const selectedStock = stocks.find(pair => pair.stock.symbol === selectedTab);
@@ -20,7 +20,7 @@ export function DashBoardTable({ stocks }) {
         const percentChange1 = (price1Predicted - price1Actual) / price1Actual * 100;
         const percentChange2 = (price2Predicted - price2Actual) / price2Actual * 100;
 
-        return percentChange2 - percentChange1;
+        return reverseTabs ? -1 * (percentChange2 - percentChange1) : percentChange2 - percentChange1;
     });
 
     // Create stock tabs
@@ -95,6 +95,7 @@ DashBoardTable.propTypes = {
             ),
         }),
     ).isRequired,
+    reverseTabs: PropTypes.bool.isRequired,
 }
 
 const DashBoardTableContainer = styled.article`

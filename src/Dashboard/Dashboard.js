@@ -8,8 +8,8 @@ const url = "http://localhost:8000/api/v1/";
 
 export function DashboardPage() {
     const [context, updateContext] = useContext(CapitalizerContext);
-    let buyTable = context.topStocks !== "" ? <DashBoardTable stocks={context.topStocks}></DashBoardTable> : <div></div>;
-    let sellTable = context.bottomStocks !== "" ? <DashBoardTable stocks={context.bottomStocks}></DashBoardTable> : <div></div>;
+    let buyTable = context.topStocks !== "" ? <DashBoardTable stocks={context.topStocks} reverseTabs={false}></DashBoardTable> : <div></div>;
+    let sellTable = context.bottomStocks !== "" ? <DashBoardTable stocks={context.bottomStocks} reverseTabs={true}></DashBoardTable> : <div></div>;
 
     // Pull data for the top stocks table on the dashboard
     useEffect(() => {
