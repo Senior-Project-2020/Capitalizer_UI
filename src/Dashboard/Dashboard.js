@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
-import { DashBoardTable } from "../components/DashboardTable";
+import { DashBoardTable, BlankTable } from "../components/DashboardTable";
 import { CapitalizerContext } from "../Context";
 import axios from "axios";
 
@@ -8,8 +8,8 @@ const url = "http://localhost:8000/api/v1/";
 
 export function DashboardPage() {
     const [context, updateContext] = useContext(CapitalizerContext);
-    let buyTable = context.topStocks !== "" ? <DashBoardTable stocks={context.topStocks} reverseTabs={false}></DashBoardTable> : <div></div>;
-    let sellTable = context.bottomStocks !== "" ? <DashBoardTable stocks={context.bottomStocks} reverseTabs={true}></DashBoardTable> : <div></div>;
+    let buyTable = context.topStocks !== "" ? <DashBoardTable stocks={context.topStocks} reverseTabs={false}></DashBoardTable> : <BlankTable></BlankTable>;
+    let sellTable = context.bottomStocks !== "" ? <DashBoardTable stocks={context.bottomStocks} reverseTabs={true}></DashBoardTable> : <BlankTable></BlankTable>;
 
     // Pull data for the top stocks table on the dashboard
     useEffect(() => {

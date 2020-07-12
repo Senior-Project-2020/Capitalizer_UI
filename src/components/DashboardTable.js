@@ -78,6 +78,46 @@ export function DashBoardTable({ stocks, reverseTabs }) {
     )
 }
 
+export function BlankTable() {
+    const stockTabs = [];
+
+    // Create stock tabs
+    for(let i = 0; i < 5; i++){
+        if (i === 0) {
+            // Add the "selected" styling to the top tab
+            stockTabs.push(
+                <BlankTab 
+                    key={i}
+                    style={{
+                        "borderWidth": "0px 1px 1px 0px",
+                        "margin": "0% 0% 0% -5%", 
+                        "background": "rgba(255, 255, 255, 0.30)",
+                        "borderRadius": "10px 0px 0px 10px"
+                    }}
+                ></BlankTab>
+            );
+        }
+        else {
+            // Normal, non-selected styling
+            stockTabs.push(
+                <BlankTab key={i}></BlankTab>
+            );
+        }
+    }
+
+    return(
+        <DashBoardTableContainer>
+            <TopContainer>
+                <TabsContainer>{stockTabs}</TabsContainer>
+                <GraphContainer></GraphContainer>
+            </TopContainer>
+            <DetailContainer
+                style={{"height": "125px"}}
+            ></DetailContainer>
+        </DashBoardTableContainer>
+    )
+}
+
 DashBoardTable.propTypes = {
     stocks: PropTypes.arrayOf(
         PropTypes.shape({
@@ -132,4 +172,12 @@ const DetailContainer = styled.div`
     border-color: black;
     border-radius: 0px 0px 15px 15px;
     padding: 1.5% 2%;
+`;
+
+const BlankTab = styled.div`
+    height: 75px;
+    background: rgba(255, 255, 255, 0.16);
+    border-style: solid;
+    border-width: 1px 1px 1px 0px;
+    border-color: black;
 `;
