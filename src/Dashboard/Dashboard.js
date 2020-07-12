@@ -4,11 +4,29 @@ import { DashBoardTable, BlankTable } from "../components/DashboardTable";
 import { CapitalizerContext } from "../Context";
 import { apiURL } from "../constants";
 import axios from "axios";
+import { isEmpty } from "lodash";
 
 export function DashboardPage() {
     const [context, updateContext] = useContext(CapitalizerContext);
-    let buyTable = context.topStocks !== "" ? <DashBoardTable stocks={context.topStocks} reverseTabs={false}></DashBoardTable> : <BlankTable></BlankTable>;
-    let sellTable = context.bottomStocks !== "" ? <DashBoardTable stocks={context.bottomStocks} reverseTabs={true}></DashBoardTable> : <BlankTable></BlankTable>;
+    const buyTable = context.topStocks !== "" ? <DashBoardTable stocks={context.topStocks} reverseTabs={false}></DashBoardTable> : <BlankTable></BlankTable>;
+    const sellTable = context.bottomStocks !== "" ? <DashBoardTable stocks={context.bottomStocks} reverseTabs={true}></DashBoardTable> : <BlankTable></BlankTable>;
+    const username = isEmpty(context.user) ? "user" : context.user.username;
+    
+    // Pull user info if it is not in context
+    useEffect(() => {
+        if (context.authToken !== "") {
+          axios
+            .get(apiURL + "rest-auth/user/", {
+              headers: { Authorization: "Token " + context.authToken },
+            })
+            .then((response) => {
+              updateContext({
+                type: "update user",
+                user: response.data,
+              });
+            });
+        }
+      }, [context.authToken, updateContext]);
 
     // Pull data for the top stocks table on the dashboard
     useEffect(() => {
@@ -85,16 +103,13 @@ export function DashboardPage() {
             })
         }
     }, [context.authToken, context.bottomStocks,updateContext]);
-    
-    
-    const user = "USER"; // TODO: Pull from user data in context
 
     return (
         <section>
             <header
                 style={{ "marginTop": "3%" }}
             >
-                <WelcomeMessage>Hello, {user}</WelcomeMessage>
+                <WelcomeMessage>Hello {username},</WelcomeMessage>
                 <BuySellMessage>Here are the top performing stock predictions for today...</BuySellMessage>
             </header>
             {buyTable}
