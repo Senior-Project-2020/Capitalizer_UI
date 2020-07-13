@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { CapitalizerContext } from "../Context";
 import styled from "styled-components";
 import { SideBar } from "../components/SideBar";
@@ -150,59 +150,63 @@ const price50 = {
 };
 const priceList = [price1, price2, price3, price4, price5];
 const priceList2 = [price10, price20, price30, price40, price50];
-const stocks = [
-  priceList,
-  priceList2,
-  priceList,
-  priceList2,
-  priceList,
-];
+const stocks = [priceList, priceList2, priceList, priceList2, priceList];
 
 export function StockPage() {
   const [state, updateState] = useContext(CapitalizerContext);
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   useEffect(() => {
-    if(state.authToken !== ""){
-      getStockList(url + "stock/", state.authToken, [], updateState)
-      getStockPrices(url + "stock-price/", state.authToken, [], updateState)
+    if (state.stockPrices.length === 0 && state.authToken !== "") {
+      getStockList(url + "stock/", state.authToken, [], updateState);
+      getStockPrices(url + "stock-price/", state.authToken, [], updateState);
     }
-  }, [state.authToken])
+  }, [state.authToken]);
 
-  const StockDetails = []
+  const StockDetails = [];
 
   for (const [index, value] of state.stocks.entries()) {
-    let prices = state.stockPrices
-      .filter((price) => price.stock === value.symbol)
-      .sort((a, b) => a.id - b.id);
+    if (selectedCategory === "" || selectedCategory === value.category) {
+      if (
+        value.name.toLowerCase().includes(state.searchField.toLowerCase()) ||
+        value.symbol.toLowerCase().includes(state.searchField.toLowerCase())
+      ) {
+        let prices = state.stockPrices
+          .filter((price) => price.stock === value.symbol)
+          .sort((a, b) => a.id - b.id);
 
-    if (prices.length > 3) {
-      const predictedClose = prices[prices.length - 1].predicted_closing_price
-      const mostRecentData = prices[prices.length - 2]
+        if (prices.length > 3) {
+          const predictedClose =
+            prices[prices.length - 1].predicted_closing_price;
+          const mostRecentData = prices[prices.length - 2];
 
-      StockDetails.push(
-        <SearchStockDetail
-          key={index}
-          name={value.name}
-          openPrice={parseFloat(mostRecentData.opening_price)}
-          predictedClose={parseFloat(predictedClose)}
-          low={parseFloat(mostRecentData.daily_low)}
-          high={parseFloat(mostRecentData.daily_high)}
-          previousClose={parseFloat(mostRecentData.opening_price)}
-          volume={parseFloat(mostRecentData.volume)}
-          prices={prices}
-        ></SearchStockDetail>
-      );
+          StockDetails.push(
+            <SearchStockDetail
+              key={index}
+              name={value.name}
+              openPrice={parseFloat(mostRecentData.opening_price)}
+              predictedClose={parseFloat(predictedClose)}
+              low={parseFloat(mostRecentData.daily_low)}
+              high={parseFloat(mostRecentData.daily_high)}
+              previousClose={parseFloat(mostRecentData.opening_price)}
+              volume={parseFloat(mostRecentData.volume)}
+              prices={prices}
+            ></SearchStockDetail>
+          );
+        }
+      }
     }
   }
 
   return (
     <div style={{ display: "flex" }}>
-      <SideBar></SideBar>
+      <SideBar
+        selected={selectedCategory}
+        setSelected={setSelectedCategory}
+      ></SideBar>
       <div style={{ flexGrow: "1" }}>
         <SearchBar></SearchBar>
-        <DetailContainer>
-          {StockDetails}
-        </DetailContainer>
+        <DetailContainer>{StockDetails}</DetailContainer>
       </div>
     </div>
   );
