@@ -13,8 +13,9 @@ export function DashboardPage() {
     const username = isEmpty(context.user) ? "user" : context.user.username;
     
     // Pull user info if it is not in context
+    // User info is needed to display username
     useEffect(() => {
-        if (context.authToken !== "") {
+        if (context.authToken !== "" && isEmpty(context.user)) {
           axios
             .get(apiURL + "rest-auth/user/", {
               headers: { Authorization: "Token " + context.authToken },
