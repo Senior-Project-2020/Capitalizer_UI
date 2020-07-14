@@ -31,8 +31,8 @@ export function AreaGraph({ data, positiveColor }) {
         annotations: {
             xaxis: [
                 {
-                    x: annotation.start.getTime(),
-                    x2: annotation.end.getTime(),
+                    x: annotation.start.toDateString().slice(0, -5),
+                    x2: annotation.end.toDateString().slice(0, -5),
                     borderColor: "#FFFFFF",
                     label: {
                         borderColor: "#FFFFFF",
@@ -80,10 +80,8 @@ export function AreaGraph({ data, positiveColor }) {
             enabled: false,
         },
         xaxis: {
-            categories: Array.from(data, d => d.x.getTime()),
-            type: 'datetime',
+            categories: Array.from(data, d => d.x.toDateString().slice(0, -5)),
             labels: {
-                offsetX: -6,
                 style: {
                     colors: "#ffffff",
                     fontFamily: "iceland regular",
@@ -173,10 +171,8 @@ export function SmallAreaGraph({ data, positiveColor }) {
             enabled: false,
         },
         xaxis: {
-            categories: Array.from(data, d => d.x.getTime()),
-            type: 'datetime',
+            categories: Array.from(data, d => d.x.toDateString().slice(0, -5)),
             labels: {
-                offsetX: -6,
                 style: {
                     colors: "#ffffff",
                     fontFamily: "iceland regular",

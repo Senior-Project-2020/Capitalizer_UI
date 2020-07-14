@@ -1,48 +1,114 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import styled from "styled-components";
-import { DashBoardTable } from "../components/DashboardTable";
+import { DashBoardTable, BlankTable } from "../components/DashboardTable";
+import { CapitalizerContext } from "../Context";
+import { apiURL } from "../constants";
+import { getSuggestions, getStockPrices, getStockList } from "../api/requests"
+import axios from "axios";
+import { isEmpty } from "lodash";
 
 export function DashboardPage() {
-    const stock1 = { "name": "Amazon.com Inc.", "symbol": "AMZN1", "category": "Information Technology", "stock_prices": [0] };
-    const stock2 = { "name": "Amazon.com Inc.", "symbol": "AMZN2", "category": "Information Technology", "stock_prices": [0] };
-    const stock3 = { "name": "Amazon.com Inc.", "symbol": "AMZN3", "category": "Information Technology", "stock_prices": [0] };
-    const stock4 = { "name": "Amazon.com Inc.", "symbol": "AMZN4", "category": "Information Technology", "stock_prices": [0] };
-    const stock5 = { "name": "Amazon.com Inc.", "symbol": "AMZN5", "category": "Information Technology", "stock_prices": [0] };
-    const price1 = { 'id': 0, 'stock': "AMZN", 'date': new Date("2020-01-01"), 'predicted_closing_price': 1123, 'opening_price': 124, 'actual_closing_price': 2124, 'daily_high': 125, 'daily_low': 124, 'volume': 10000 };
-    const price2 = { 'id': 0, 'stock': "AMZN", 'date': new Date("2020-01-02"), 'predicted_closing_price': 2123, 'opening_price': 124, 'actual_closing_price': 1124, 'daily_high': 125, 'daily_low': 124, 'volume': 10000 };
-    const price3 = { 'id': 0, 'stock': "AMZN", 'date': new Date("2020-01-03"), 'predicted_closing_price': 3123, 'opening_price': 124, 'actual_closing_price': 5124, 'daily_high': 125, 'daily_low': 124, 'volume': 10000 };
-    const price4 = { 'id': 0, 'stock': "AMZN", 'date': new Date("2020-01-04"), 'predicted_closing_price': 4123, 'opening_price': 124, 'actual_closing_price': 3124, 'daily_high': 125, 'daily_low': 124, 'volume': 10000 };
-    const price5 = { 'id': 0, 'stock': "AMZN", 'date': new Date("2020-01-05"), 'predicted_closing_price': 5123, 'opening_price': 124, 'actual_closing_price': 4124, 'daily_high': 125, 'daily_low': 124, 'volume': 10000 };
-    const price10 = { 'id': 0, 'stock': "AMZN", 'date': new Date("2020-01-01"), 'predicted_closing_price': 5123, 'opening_price': 124, 'actual_closing_price': 4124, 'daily_high': 125, 'daily_low': 124, 'volume': 10000 };
-    const price20 = { 'id': 0, 'stock': "AMZN", 'date': new Date("2020-01-02"), 'predicted_closing_price': 4123, 'opening_price': 124, 'actual_closing_price': 5124, 'daily_high': 125, 'daily_low': 124, 'volume': 10000 };
-    const price30 = { 'id': 0, 'stock': "AMZN", 'date': new Date("2020-01-03"), 'predicted_closing_price': 3123, 'opening_price': 124, 'actual_closing_price': 1124, 'daily_high': 125, 'daily_low': 124, 'volume': 10000 };
-    const price40 = { 'id': 0, 'stock': "AMZN", 'date': new Date("2020-01-04"), 'predicted_closing_price': 2123, 'opening_price': 124, 'actual_closing_price': 3124, 'daily_high': 125, 'daily_low': 124, 'volume': 10000 };
-    const price50 = { 'id': 0, 'stock': "AMZN", 'date': new Date("2020-01-05"), 'predicted_closing_price': 1123, 'opening_price': 124, 'actual_closing_price': 2124, 'daily_high': 125, 'daily_low': 124, 'volume': 10000 };
-    const priceList = [price1, price2, price3, price4, price5]
-    const priceList2 = [price10, price20, price30, price40, price50]
-    const stocks = [
-      {stock: stock1, prices: priceList}, 
-      {stock: stock2, prices: priceList2}, 
-      {stock: stock3, prices: priceList}, 
-      {stock: stock4, prices: priceList2}, 
-      {stock: stock5, prices: priceList},
-    ]
+    const [context, updateContext] = useContext(CapitalizerContext);
+    const buyTable = context.topStocks !== "" ? <DashBoardTable stocks={context.topStocks} reverseTabs={false}></DashBoardTable> : <BlankTable></BlankTable>;
+    const sellTable = context.bottomStocks !== "" ? <DashBoardTable stocks={context.bottomStocks} reverseTabs={true}></DashBoardTable> : <BlankTable></BlankTable>;
+    const username = isEmpty(context.user) ? "user" : context.user.username;
     
-    const user = "USER";
+    // Pull user info if it is not in context
+    // User info is needed to display username
+    useEffect(() => {
+        if (context.authToken !== "" && isEmpty(context.user)) {
+          axios
+            .get(apiURL + "rest-auth/user/", {
+              headers: { Authorization: "Token " + context.authToken },
+            })
+            .then((response) => {
+              updateContext({
+                type: "update user",
+                user: response.data,
+              });
+            });
+        }
+      }, [context.authToken, context.user, updateContext]);
+
+    // Load suggestions and stock prices if they are not in the context
+    useEffect(() => {
+        if (context.authToken !== "") {
+            if (isEmpty(context.suggestions)) {
+                getSuggestions(getSuggestionDate(), context.authToken, updateContext);
+            }
+            if (isEmpty(context.stockPrices)) {
+                getStockPrices(apiURL + "stock-price/?recent=all", context.authToken, [], updateContext)
+            }
+            if (isEmpty(context.stocks)) {
+                getStockList(apiURL + "stock/", context.authToken, [], updateContext)
+            }
+        }
+    }, [context.authToken, context.suggestions, context.stockPrices, context.stocks, updateContext]);
+
+    // Calculate the top stocks if they are not in the context
+    useEffect(() => {
+        if (
+            !isEmpty(context.suggestions) && 
+            !isEmpty(context.stockPrices) && 
+            !isEmpty(context.stocks) &&
+            isEmpty (context.topStocks)
+        ) {
+            updateContext({
+                type: "update top stocks",
+                topStocks: getTableStocks(context.suggestions.length - 5, context.suggestions.length - 1),
+            });
+        }
+    }, [context.suggestions, context.stockPrices, context.stocks, context.topStocks, updateContext]);
+    
+    // Calculate the bottom stocks if they are not in the context
+    useEffect(() => {
+        if (
+            !isEmpty(context.suggestions) && 
+            !isEmpty(context.stockPrices) && 
+            !isEmpty(context.stocks) &&
+            isEmpty (context.bottomStocks)
+        ) {
+            updateContext({
+                type: "update bottom stocks",
+                bottomStocks: getTableStocks(0, 4),
+            });
+        }
+    }, [context.suggestions, context.stockPrices, context.stocks, context.bottomStocks, updateContext]);
+
+    // Gets the stocks from the suggestions context based on the given start and end index (inclusive)
+    // The suggestions array is sorted (worst to best) by percent price change
+    const getTableStocks = (startIndex, endIndex) => {
+        // Sort suggestions based on percent change (worst to best)
+        context.suggestions
+            .sort((s1, s2) => s1.percent_change - s2.percent_change);
+    
+        // Gets the stocks given by start and end index
+        const stocks = []
+        for (let i = startIndex; i <= endIndex; i++) {
+            const stock = context.stocks.find(s => s.symbol === context.suggestions[i].stock);
+            const stockPrices = context.stockPrices.filter((price) => price.stock === context.suggestions[i].stock);
+    
+            stocks.push ({
+                stock: stock,
+                prices: cleanPricesArray(stockPrices),
+            });
+        }
+        return stocks;
+    }
 
     return (
         <section>
             <header
                 style={{ "marginTop": "3%" }}
             >
-                <WelcomeMessage>Hello, {user}</WelcomeMessage>
-                <BuySellMessage>Here are our suggested buys for you today...</BuySellMessage>
+                <WelcomeMessage>Hello {username},</WelcomeMessage>
+                <BuySellMessage>Here are the top performing stock predictions for today...</BuySellMessage>
             </header>
-            <DashBoardTable stocks={stocks}></DashBoardTable>
+            {buyTable}
             <header>
-                <BuySellMessage>And here are the stocks we would avoid or sell...</BuySellMessage>
+                <BuySellMessage>And here are the bottom performing stock predictions for today...</BuySellMessage>
             </header>
-            <DashBoardTable stocks={stocks}></DashBoardTable>
+            {sellTable}
         </section>
     );
 }
@@ -60,3 +126,46 @@ const BuySellMessage = styled.p`
     color: white;
     text-align: center;
 `;
+
+const cleanPricesArray = (prices) => {
+    // Convert strings of floats to floats
+    // Convert string date to date obj
+    prices.forEach(price => {
+        for (const [key, value] of Object.entries(price)){
+            if (
+                key === "actual_closing_price" ||
+                key === "daily_high" ||
+                key === "daily_low" ||
+                key === "opening_price" ||
+                key === "predicted_closing_price"
+            ) {
+                price[key] = Number.parseFloat(value);
+            }
+            else if (key === "date" && typeof(value) === 'string') {
+                const strData = value.split("-");
+                price[key] = new Date(strData[0], strData[1] - 1, strData[2]);
+            }
+        }
+    });
+
+    // Sort based on date
+    prices.sort((p1, p2) => {
+        return p1.date - p2.date;
+    });
+
+    return prices;
+}
+
+const getSuggestionDate = () => {
+    let now = new Date();
+    // If saturday or sunday, set now to be friday
+    // There are no stock prices recorded on saturday or sunday, so there are no suggestions
+    if (now.getDay() === 0){
+        now = new Date(now.setDate(now.getDate() - 2));
+    }
+    else if (now.getDay() === 6){
+        now = new Date(now.setDate(now.getDate() - 1));
+    }
+    // Convert date to format for get request parameter
+    return now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, '0') + "-" + String(now.getDate()).padStart(2, '0');
+}

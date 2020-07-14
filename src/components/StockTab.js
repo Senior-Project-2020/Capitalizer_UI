@@ -2,16 +2,16 @@ import React from "react";
 import PropTypes from 'prop-types';
 import styled from "styled-components";
 
-export function StockTab({ stock, price, isSelected, isTop, setSelectedTab }) {
-    const change = price.predicted_closing_price - price.opening_price;
-    const percentChange = change / price.opening_price * 100;
+export function StockTab({ stock, predictedClosing, previousClosing, isSelected, isTop, setSelectedTab }) {
+    const change = predictedClosing - previousClosing;
+    const percentChange = change / previousClosing * 100;
 
     // Update tab container's style depending on isSelected and isTop props
     let style;
 
     if (isTop){
-        // If on top, add radius to top left corner
-        style = { ...style, "borderRadius": "15px 0px 0px 0px"}
+        // If on top, add radius to top left corner and remove border from top edge
+        style = { ...style, "borderRadius": "15px 0px 0px 0px", "borderWidth": "0px 1px 1px 0px"};
     }
 
     if (isSelected){
@@ -21,6 +21,11 @@ export function StockTab({ stock, price, isSelected, isTop, setSelectedTab }) {
             "background": "rgba(255, 255, 255, 0.30)",
             "borderRadius": "10px 0px 0px 10px"
         };
+
+        if(isTop){
+            // If on top, remove border from top edge
+            style = { ...style, "borderWidth": "0px 1px 1px 0px"};
+        }
     }
 
     return (
@@ -33,14 +38,14 @@ export function StockTab({ stock, price, isSelected, isTop, setSelectedTab }) {
                 <tbody>
                     <tr>
                         <SymbolHeader stockSymbol={stock.symbol}></SymbolHeader>
-                        <TableHeader label={"Opening:"}></TableHeader>
-                        <TableHeader label={"Predicted:"}></TableHeader>
+                        <TableHeader label={"Previous Closing:"}></TableHeader>
+                        <TableHeader label={"Predicted Closing:"}></TableHeader>
                         <TableHeaderGap></TableHeaderGap>
-                        <TableHeader label={"Change:"}></TableHeader>
+                        <TableHeader label={"Predicted Change:"}></TableHeader>
                     </tr>
                     <tr>
-                        <TableData data={"$" + price.opening_price.toFixed(2)}></TableData>
-                        <TableData data={"$" + price.predicted_closing_price.toFixed(2)}></TableData>
+                        <TableData data={"$" + previousClosing.toFixed(2)}></TableData>
+                        <TableData data={"$" + predictedClosing.toFixed(2)}></TableData>
                         <TableData data={"$" + change.toFixed(2) + " (" + percentChange.toFixed(2) + "%)"}></TableData>
                     </tr>
                 </tbody>
@@ -53,10 +58,8 @@ StockTab.propTypes = {
     stock: PropTypes.shape({
         symbol: PropTypes.string,
     }).isRequired,
-    price: PropTypes.shape({
-        opening_price: PropTypes.number,
-        predicted_closing_price: PropTypes.number,
-    }).isRequired,
+    predictedClosing: PropTypes.number.isRequired,
+    previousClosing: PropTypes.number.isRequired,
     isSelected: PropTypes.bool.isRequired,
     isTop: PropTypes.bool.isRequired,
 }
