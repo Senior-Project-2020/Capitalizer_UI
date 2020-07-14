@@ -4,6 +4,9 @@ const initialData = {
   searchField: "",
   topStocks: "",
   bottomStocks: "",
+  suggestions: [],
+  stocks: [],
+  stockPrices: [],
   authToken: "",
   user: {},
 };
@@ -20,6 +23,15 @@ function capitalizerReducer(state, action) {
     }
     case "update bottom stocks": {
       return { ...state, bottomStocks: action.bottomStocks};
+    }
+    case "update suggestions": {
+      return { ...state, suggestions: action.suggestions};
+    }
+    case "update stocks": {
+      return { ...state, stocks: action.stocks};
+    }
+    case "update stock prices": {
+      return { ...state, stockPrices: action.stockPrices};
     }
     case "update token": {
       return { ...state, authToken: action.token};
