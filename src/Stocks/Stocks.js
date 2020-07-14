@@ -12,8 +12,10 @@ export function StockPage() {
   const [selectedCategory, setSelectedCategory] = useState("");
 
   useEffect(() => {
-    if (state.stockPrices.length === 0 && state.authToken !== "") {
+    if (state.stocks.length == 0 && state.authToken !== "") {
       getStockList(apiURL + "stock/", state.authToken, [], updateState);
+    }
+    if (state.stockPrices.length === 0 && state.authToken !== "") {
       getStockPrices(apiURL + "stock-price/", state.authToken, [], updateState);
     }
   }, [state.authToken]);

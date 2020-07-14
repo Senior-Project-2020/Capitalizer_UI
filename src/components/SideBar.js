@@ -8,12 +8,15 @@ export function SideBar({ selected, setSelected }) {
 
   for (const [index, value] of Categories.entries()) {
     AvailableCategories.push(
-      <div key={index} style={selected === value ? {color: "#75a9f9"} : {color: "white"}}>
+      <div
+        key={index}
+        style={selected === value ? { color: "#75a9f9" } : { color: "white" }}
+      >
         <Category
           onClick={() => {
-            if(selected === value){
+            if (selected === value) {
               setSelected("");
-            }else{
+            } else {
               setSelected(value);
             }
           }}

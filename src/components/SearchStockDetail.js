@@ -38,17 +38,23 @@ export function SearchStockDetail({
           <StockDetailHeader>{name}</StockDetailHeader>
           <StockDetailBody>
             <TextEntry>Opening Price: ${openPrice.toFixed(2)}</TextEntry>
-            <TextEntry>Predicted Closing: ${predictedClose.toFixed(2)}</TextEntry>
+            <TextEntry>
+              Predicted Closing: ${predictedClose.toFixed(2)}
+            </TextEntry>
             {!open ? <TextEntry>More Stock Info ...</TextEntry> : null}
           </StockDetailBody>
         </TextContainer>
-        
+
         <IconContainer
           onClick={() => {
             setOpen(!open);
           }}
         >
-          {open ? <TextEntry style={{marginRight: "120px"}}>Closing Price Over Time</TextEntry>: null}
+          {open ? (
+            <TextEntry style={{ marginRight: "120px" }}>
+              Closing Price Over Time
+            </TextEntry>
+          ) : null}
           {open ? <UpArrowIcon></UpArrowIcon> : <DownArrowIcon></DownArrowIcon>}
         </IconContainer>
       </div>
@@ -63,7 +69,9 @@ export function SearchStockDetail({
           <TextContainer>
             <TextEntry>Low Price: ${low.toFixed(2)}</TextEntry>
             <TextEntry>High Price: ${high.toFixed(2)}</TextEntry>
-            <TextEntry>Yesterdays Closing: ${previousClose.toFixed(2)}</TextEntry>
+            <TextEntry>
+              Yesterdays Closing: ${previousClose.toFixed(2)}
+            </TextEntry>
             <TextEntry>Volume: {volume}</TextEntry>
           </TextContainer>
           <div style={{ margin: "5px 5px 5px auto" }}>
@@ -99,18 +107,18 @@ SearchStockDetail.propTypes = {
   previousClose: PropTypes.number.isRequired,
   volume: PropTypes.number.isRequired,
   prices: PropTypes.arrayOf(
-      PropTypes.shape({
-        actual_closing_price: PropTypes.string.isRequired,
-        daily_high: PropTypes.string.isRequired,
-        daily_low: PropTypes.string.isRequired,
-        date: PropTypes.string.isRequired,
-        id: PropTypes.number.isRequired,
-        opening_price: PropTypes.string.isRequired,
-        predicted_closing_price: PropTypes.string.isRequired,
-        stock: PropTypes.string.isRequired,
-        volume: PropTypes.number.isRequired,
-      }).isRequired
-    ).isRequired,
+    PropTypes.shape({
+      actual_closing_price: PropTypes.string.isRequired,
+      daily_high: PropTypes.string.isRequired,
+      daily_low: PropTypes.string.isRequired,
+      date: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
+      opening_price: PropTypes.string.isRequired,
+      predicted_closing_price: PropTypes.string.isRequired,
+      stock: PropTypes.string.isRequired,
+      volume: PropTypes.number.isRequired,
+    }).isRequired
+  ).isRequired,
 };
 
 const StockDetailContainer = styled.div`
