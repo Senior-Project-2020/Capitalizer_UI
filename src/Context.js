@@ -2,10 +2,13 @@ import React, { useReducer, createContext } from "react";
 
 const initialData = {
   searchField: "",
-  user: {},
-  authToken: "",
+  topStocks: "",
+  bottomStocks: "",
+  suggestions: [],
   stocks: [],
   stockPrices: [],
+  authToken: "",
+  user: {},
 };
 
 export const CapitalizerContext = createContext([initialData, () => {}]);
@@ -15,17 +18,26 @@ function capitalizerReducer(state, action) {
     case "update search": {
       return { ...state, searchField: action.searchField };
     }
-    case "update user": {
-      return { ...state, user: action.user};
+    case "update top stocks": {
+      return { ...state, topStocks: action.topStocks};
     }
-    case "update token": {
-      return { ...state, authToken: action.token};
+    case "update bottom stocks": {
+      return { ...state, bottomStocks: action.bottomStocks};
+    }
+    case "update suggestions": {
+      return { ...state, suggestions: action.suggestions};
     }
     case "update stocks": {
       return { ...state, stocks: action.stocks};
     }
     case "update stock prices": {
-      return { ...state, stockPrices: action.stocks};
+      return { ...state, stockPrices: action.stockPrices};
+    }
+    case "update token": {
+      return { ...state, authToken: action.token};
+    }
+    case "update user": {
+      return { ...state, user: action.user};
     }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);

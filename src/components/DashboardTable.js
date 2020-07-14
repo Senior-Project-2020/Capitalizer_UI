@@ -5,19 +5,22 @@ import { StockDetail } from "./StockDetail";
 import { StockTab } from "./StockTab";
 import { AreaGraph } from "./AreaGraph";
 
-export function DashBoardTable({ stocks }) {
+export function DashBoardTable({ stocks, reverseTabs }) {
     const stockTabs = [];
     const [selectedTab, setSelectedTab] = useState(stocks[0].stock.symbol);
     const selectedStock = stocks.find(pair => pair.stock.symbol === selectedTab);
 
     // Sort stocks based on percent change (of last element in the prices array)
     stocks.sort((s1, s2) => {
-        const price1 = s1.prices[s1.prices.length - 1]
-        const price2 = s2.prices[s2.prices.length - 1]
-        const percentChange1 = (price1.predicted_closing_price - price1.opening_price) / price1.opening_price * 100;
-        const percentChange2 = (price2.predicted_closing_price - price2.opening_price) / price2.opening_price * 100;
+        const price1Actual = s1.prices[s1.prices.length - 2].actual_closing_price;
+        const price1Predicted = s1.prices[s1.prices.length - 1].predicted_closing_price;
+        const price2Actual = s2.prices[s2.prices.length - 2].actual_closing_price;
+        const price2Predicted = s2.prices[s2.prices.length - 1].predicted_closing_price;
 
-        return percentChange2 - percentChange1;
+        const percentChange1 = (price1Predicted - price1Actual) / price1Actual * 100;
+        const percentChange2 = (price2Predicted - price2Actual) / price2Actual * 100;
+
+        return reverseTabs ? -1 * (percentChange2 - percentChange1) : percentChange2 - percentChange1;
     });
 
     // Create stock tabs
@@ -26,7 +29,8 @@ export function DashBoardTable({ stocks }) {
             <StockTab 
                 key={i}
                 stock={stocks[i].stock} 
-                price={stocks[i].prices[stocks[i].prices.length - 1]} 
+                predictedClosing={stocks[i].prices[stocks[i].prices.length - 1].predicted_closing_price}
+                previousClosing={stocks[i].prices[stocks[i].prices.length - 2].actual_closing_price} 
                 isSelected={selectedTab === stocks[i].stock.symbol} 
                 isTop={i === 0}
                 setSelectedTab={setSelectedTab}
@@ -36,12 +40,14 @@ export function DashBoardTable({ stocks }) {
 
     // Get the closing price data. Only get the predicted closing price of the last price in the list
     const data = [];
+    let predictedChange = 0;
     for (let i = 0; i < selectedStock.prices.length; i++){
         if (i === selectedStock.prices.length - 1){
             data.push({
                 x: selectedStock.prices[i].date,
                 y: selectedStock.prices[i].predicted_closing_price,
             });
+            predictedChange = selectedStock.prices[i].predicted_closing_price - selectedStock.prices[i-1].actual_closing_price;
         }
         else {
             data.push({
@@ -58,16 +64,56 @@ export function DashBoardTable({ stocks }) {
                 <GraphContainer>
                     <AreaGraph 
                         data={data} 
-                        positiveColor={Number(data[data.length - 1].y) >= Number(data[data.length - 2].y)}
+                        positiveColor={predictedChange >= 0}
                     ></AreaGraph>
                 </GraphContainer>
             </TopContainer>
             <DetailContainer>
                 <StockDetail 
                     stock={selectedStock.stock} 
-                    price={selectedStock.prices[selectedStock.prices.length - 1]}
+                    price={selectedStock.prices[selectedStock.prices.length - 2]}
                 ></StockDetail>
             </DetailContainer>
+        </DashBoardTableContainer>
+    )
+}
+
+export function BlankTable() {
+    const stockTabs = [];
+
+    // Create stock tabs
+    for(let i = 0; i < 5; i++){
+        if (i === 0) {
+            // Add the "selected" styling to the top tab
+            stockTabs.push(
+                <BlankTab 
+                    key={i}
+                    style={{
+                        "borderWidth": "0px 1px 1px 0px",
+                        "margin": "0% 0% 0% -5%", 
+                        "background": "rgba(255, 255, 255, 0.30)",
+                        "borderRadius": "10px 0px 0px 10px"
+                    }}
+                ></BlankTab>
+            );
+        }
+        else {
+            // Normal, non-selected styling
+            stockTabs.push(
+                <BlankTab key={i}></BlankTab>
+            );
+        }
+    }
+
+    return(
+        <DashBoardTableContainer>
+            <TopContainer>
+                <TabsContainer>{stockTabs}</TabsContainer>
+                <GraphContainer></GraphContainer>
+            </TopContainer>
+            <DetailContainer
+                style={{"height": "125px"}}
+            ></DetailContainer>
         </DashBoardTableContainer>
     )
 }
@@ -89,6 +135,7 @@ DashBoardTable.propTypes = {
             ),
         }),
     ).isRequired,
+    reverseTabs: PropTypes.bool.isRequired,
 }
 
 const DashBoardTableContainer = styled.article`
@@ -125,4 +172,12 @@ const DetailContainer = styled.div`
     border-color: black;
     border-radius: 0px 0px 15px 15px;
     padding: 1.5% 2%;
+`;
+
+const BlankTab = styled.div`
+    height: 75px;
+    background: rgba(255, 255, 255, 0.16);
+    border-style: solid;
+    border-width: 1px 1px 1px 0px;
+    border-color: black;
 `;

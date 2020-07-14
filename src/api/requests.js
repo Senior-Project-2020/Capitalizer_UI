@@ -1,4 +1,27 @@
 import axios from "axios";
+import { apiURL } from "../constants";
+
+export function getSuggestions(date, token, updateState) {
+    axios
+        .get( apiURL + "suggestion/?date=" + date, { 
+            headers: { 
+               Authorization: "Token " + token,
+            },
+        })
+        .then((response) => {
+            if (response.status === 200){
+                // Sort the suggestions based on the predicted percent change
+                const suggestions = response.data.suggestions.sort((s1, s2) => {
+                    return s1.percent_change - s2.percent_change;
+                });
+                updateState({
+                    type: "update suggestions",
+                    suggestions: suggestions,
+                });
+            }
+        });
+    return;
+}
 
 export function getStockPrices(url, token, prices, updateState) {
   axios
@@ -16,7 +39,7 @@ export function getStockPrices(url, token, prices, updateState) {
         } else {
           updateState({
             type: "update stock prices",
-            stocks: prices,
+            stockPrices: prices,
           });
         }
       }
