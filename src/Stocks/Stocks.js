@@ -41,7 +41,7 @@ export function StockPage() {
             <SearchStockDetail
               key={index}
               name={value.name}
-              openPrice={parseFloat(mostRecentData.opening_price)}
+              openPrice={parseFloat(mostRecentData.actual_closing_price)}
               predictedClose={parseFloat(predictedClose)}
               low={parseFloat(mostRecentData.daily_low)}
               high={parseFloat(mostRecentData.daily_high)}
