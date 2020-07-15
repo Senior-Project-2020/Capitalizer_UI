@@ -27,7 +27,7 @@ const NavBarContainer = styled.div`
 const LogoContainer = styled.div`
   padding-left: 3%;
   color: white;
-  font-size: 4.6vw;
+  font-size: 4vw;
   cursor: pointer;
 `;
 
@@ -39,7 +39,7 @@ const LinkContainer = styled.div`
 
 const LinkWrapper = styled.div`
   color: white;
-  font-size: 2.6vw;
+  font-size: 2.5vw;
   padding: 30px;
   cursor: pointer;
 `;

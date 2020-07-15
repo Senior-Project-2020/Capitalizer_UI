@@ -8,16 +8,15 @@ export function Landing () {
             <WelcomeHeader>Welcome to Project Capitalizer</WelcomeHeader>
             <InfoContainer>
                 <QuestionAnswer
-                    question="Lorem ipsum dolor?"
-                    answer="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                    question="What is Project Capitalizer?"
+                    answer="Project Capitalizer is a stock prediction app. We harness the power of modern day AI to allow our users to make better informed decisions on how to invest their hard-earned money. Our goal is to bring accurate stock market predictions to everyday users."
                 ></QuestionAnswer>
                 <QuestionAnswer
-                    question="Lorem ipsum dolor?"
-                    answer="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                    question="How does Project Capitalizer work?"
+                    answer="Every night, our machine learning model predicts the closing price for stocks in the S&P 500. Our software compares the predicted closing prices of all the stocks and shows our users the best and worst predicted performing stocks. Our users can then use that information to decide on which stocks to buy and sell."
                 ></QuestionAnswer>
-                <Line></Line>
-                <Signup></Signup>
             </InfoContainer>
+            <Signup></Signup>
         </LandingContainer>
     );
 }
@@ -38,20 +37,21 @@ const LandingContainer = styled.section`
 const WelcomeHeader = styled.h1`
     margin: 5% 0 0 0;
     font-size: 5vw;
-    border-style: solid;
-    border-width: 0 0 0.25vw 0;
-    border-color: white;
 `;
 
 const InfoContainer = styled.section`
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 2.5% 10%;
+    align-items: baseline;
+    padding: 2.5% 1%;
+    margin: 0 2%;
+    border-style: solid;
+    border-width: 0.25vw 0;
+    border-color: white;
 `;
 
 const QuestionAnswerContainer = styled.article`
-    margin: 3% 0;
+    margin: 3% 4%;
+    width: 50%;
 `;
 
 const QuestionWrapper = styled.header`
@@ -62,7 +62,7 @@ const QuestionWrapper = styled.header`
     margin-bottom: 2%;
 `;
 
-const AnswerWrapper = styled.header`
+const AnswerWrapper = styled.p`
     font-size: 1.5vw;
 `;
 
@@ -76,7 +76,7 @@ const QuestionAnswer = ({ question, answer }) => {
 }
 
 const SignupContainer = styled.article`
-    margin: 3% 0;
+    margin: 3% 0 4% 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -118,11 +118,3 @@ const SignupButton = () => {
 
   return <ButtonWrapper onClick={handleClick}>Sign Up</ButtonWrapper>;
 };
-
-const Line = styled.div`
-    margin: 2.5% 0 0 0;
-    width: 105%;
-    border-style: solid;
-    border-width: 0 0 0.25vw 0;
-    border-color: white;
-`;
