@@ -9,6 +9,7 @@ import { SignupPage } from "./Signup/Signup";
 import { ProfilePage } from "./Profile/Profile";
 import { LogInPage } from "./LogIn/LogIn";
 import { AuthToken } from "./components/AuthToken";
+import { Landing } from "./Landing/Landing"
 import "./App.css";
 
 function App() {
@@ -16,6 +17,10 @@ function App() {
     <CapitalizerProvider>
       <Router>
         <Route exact path="/">
+          <NonauthNavBar></NonauthNavBar>
+          <Landing></Landing>
+        </Route>
+        <Route path="/login">
           <NonauthNavBar></NonauthNavBar>
           <LogInPage></LogInPage>
         </Route>
