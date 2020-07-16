@@ -10,7 +10,7 @@ export function SideBar({ selected, setSelected }) {
     AvailableCategories.push(
       <div
         key={index}
-        style={selected === value ? { color: "#75a9f9" } : { color: "white" }}
+        style={selected === value ? { color: "#00aa00" } : { color: "white" }}
       >
         <Category
           onClick={() => {
@@ -66,6 +66,6 @@ const Category = styled.div`
   font-size: 20px;
   line-height: 30px;
   :hover {
-    color: #75a9f9;
+    color: #00aa00;
   }
 `;
