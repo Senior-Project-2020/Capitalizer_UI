@@ -17,6 +17,10 @@ export function LogOutButton() {
           type: "update token",
           token: "",
         });
+        updateContext({
+          type: "update user",
+          user: {},
+        });
         history.push("/");
       }}
     >
