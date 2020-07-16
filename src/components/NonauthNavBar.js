@@ -27,19 +27,22 @@ const NavBarContainer = styled.div`
 const LogoContainer = styled.div`
   padding-left: 3%;
   color: white;
-  font-size: 4vw;
+  font-size: 3.5vw;
   cursor: pointer;
+  width: 50%;
 `;
 
 const LinkContainer = styled.div`
   display: flex;
+  justify-content: flex-end;
   align-items: center;
   padding-right: 3%;
+  width: 50%;
 `;
 
 const LinkWrapper = styled.div`
   color: white;
-  font-size: 2.5vw;
+  font-size: 2.25vw;
   padding: 30px;
   cursor: pointer;
 `;

@@ -22,7 +22,7 @@ export function Landing () {
 }
 
 const LandingContainer = styled.section`
-    margin: 5% 12%;
+    margin: 3% 5%;
     color: white;
     background: rgba(255, 255, 255, 0.16);
     border-style: solid;
@@ -35,14 +35,14 @@ const LandingContainer = styled.section`
 `;
 
 const WelcomeHeader = styled.h1`
-    margin: 5% 0 0 0;
-    font-size: 5vw;
+    margin: 3% 0 0 0;
+    font-size: 4.5vw;
 `;
 
 const InfoContainer = styled.section`
     display: flex;
     align-items: baseline;
-    padding: 2.5% 1%;
+    padding: 1% 1% 0 1%;
     margin: 0 2%;
     border-style: solid;
     border-width: 0.25vw 0;
@@ -50,7 +50,7 @@ const InfoContainer = styled.section`
 `;
 
 const QuestionAnswerContainer = styled.article`
-    margin: 3% 4%;
+    margin: 2%;
     width: 50%;
 `;
 
@@ -76,14 +76,14 @@ const QuestionAnswer = ({ question, answer }) => {
 }
 
 const SignupContainer = styled.article`
-    margin: 3% 0 4% 0;
+    margin: 2% 0;
     display: flex;
     flex-direction: column;
     align-items: center;
 `;
 
 const SignupHeaderWrapper = styled.header`
-    font-size: 2.5vw;
+    font-size: 2.25vw;
     margin-bottom: 2%;
 `;
 
@@ -105,7 +105,7 @@ const ButtonWrapper = styled.div`
   padding: 2% 4%;
   background: rgba(0,0,0,0);
   color: white;
-  font-size: 2vw;
+  font-size: 1.75vw;
   cursor: pointer;
 `;
 
