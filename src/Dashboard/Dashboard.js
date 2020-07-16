@@ -157,6 +157,7 @@ const cleanPricesArray = (prices) => {
 }
 
 const getSuggestionDate = () => {
+    // TODO: Warning: if this does not match with the most recent date returned by the stock prices
     let now = new Date();
     // If saturday or sunday, set now to be friday
     // There are no stock prices recorded on saturday or sunday, so there are no suggestions
