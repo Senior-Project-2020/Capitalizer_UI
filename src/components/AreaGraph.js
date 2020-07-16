@@ -171,7 +171,10 @@ export function SmallAreaGraph({ data, positiveColor }) {
             enabled: false,
         },
         xaxis: {
-            categories: Array.from(data, d => (new Date(d.x)).toDateString().slice(0, -5)),
+            categories: Array.from(data, d => {
+                const strData = d.x.split("-");
+                return new Date(strData[0], strData[1] - 1, strData[2]).toDateString();
+            }),
             labels: {
                 style: {
                     colors: "#ffffff",
@@ -195,10 +198,9 @@ export function SmallAreaGraph({ data, positiveColor }) {
                 series={series} 
                 type="area"
                 height={"100%"}
-                width={"500px"}
             ></Chart>
     );
-} 
+}
 
 SmallAreaGraph.propTypes = {
     data: PropTypes.arrayOf(

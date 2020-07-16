@@ -51,7 +51,7 @@ export function SearchStockDetail({
           }}
         >
           {open ? (
-            <TextEntry style={{ marginRight: "120px" }}>
+            <TextEntry style={{ marginLeft: "auto"}}>
               Closing Price Over Time
             </TextEntry>
           ) : null}
@@ -74,7 +74,7 @@ export function SearchStockDetail({
             </TextEntry>
             <TextEntry>Volume: {volume}</TextEntry>
           </TextContainer>
-          <div style={{ margin: "5px 5px 5px auto" }}>
+          <div style={{ margin: "5px 5px 5px auto", width: "75%" }}>
             <div
               style={{
                 padding: "15px",
