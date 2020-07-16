@@ -55,9 +55,9 @@ const DateWrapper = styled.div`
 const DetailHeader = ({ data }) => {
     return (
         <HeaderContainer>
-            <Link path={"/stocks/" + data["symbol"]}>
+            <div path={"/stocks/" + data["symbol"]}>
                 {data["name"] + " (" + data["symbol"] + ")"}
-            </Link>
+            </div>
             <DateWrapper>Data from: {data['date'].toDateString()}</DateWrapper>
         </HeaderContainer>
     );
