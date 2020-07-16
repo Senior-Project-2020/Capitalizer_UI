@@ -1,197 +1,69 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
+import { CapitalizerContext } from "../Context";
 import styled from "styled-components";
 import { SideBar } from "../components/SideBar";
 import { SearchBar } from "../components/SearchBar";
 import { SearchStockDetail } from "../components/SearchStockDetail";
-
-const stock1 = {
-  name: "Amazon.com Inc.",
-  symbol: "AMZN1",
-  category: "Information Technology",
-  stock_prices: [0],
-};
-const stock2 = {
-  name: "Amazon.com Inc.",
-  symbol: "AMZN2",
-  category: "Information Technology",
-  stock_prices: [0],
-};
-const stock3 = {
-  name: "Amazon.com Inc.",
-  symbol: "AMZN3",
-  category: "Information Technology",
-  stock_prices: [0],
-};
-const stock4 = {
-  name: "Amazon.com Inc.",
-  symbol: "AMZN4",
-  category: "Information Technology",
-  stock_prices: [0],
-};
-const stock5 = {
-  name: "Amazon.com Inc.",
-  symbol: "AMZN5",
-  category: "Information Technology",
-  stock_prices: [0],
-};
-const price1 = {
-  id: 0,
-  stock: "AMZN",
-  date: new Date("2020-01-01"),
-  predicted_closing_price: 1123,
-  opening_price: 124,
-  actual_closing_price: 2124,
-  daily_high: 125,
-  daily_low: 124,
-  volume: 10000,
-};
-const price2 = {
-  id: 0,
-  stock: "AMZN",
-  date: new Date("2020-01-02"),
-  predicted_closing_price: 2123,
-  opening_price: 124,
-  actual_closing_price: 1124,
-  daily_high: 125,
-  daily_low: 124,
-  volume: 10000,
-};
-const price3 = {
-  id: 0,
-  stock: "AMZN",
-  date: new Date("2020-01-03"),
-  predicted_closing_price: 3123,
-  opening_price: 124,
-  actual_closing_price: 5124,
-  daily_high: 125,
-  daily_low: 124,
-  volume: 10000,
-};
-const price4 = {
-  id: 0,
-  stock: "AMZN",
-  date: new Date("2020-01-04"),
-  predicted_closing_price: 4123,
-  opening_price: 124,
-  actual_closing_price: 3124,
-  daily_high: 125,
-  daily_low: 124,
-  volume: 10000,
-};
-const price5 = {
-  id: 0,
-  stock: "AMZN",
-  date: new Date("2020-01-05"),
-  predicted_closing_price: 5123,
-  opening_price: 124,
-  actual_closing_price: 4124,
-  daily_high: 125,
-  daily_low: 124,
-  volume: 10000,
-};
-const price10 = {
-  id: 0,
-  stock: "AMZN",
-  date: new Date("2020-01-01"),
-  predicted_closing_price: 5123,
-  opening_price: 124,
-  actual_closing_price: 4124,
-  daily_high: 125,
-  daily_low: 124,
-  volume: 10000,
-};
-const price20 = {
-  id: 0,
-  stock: "AMZN",
-  date: new Date("2020-01-02"),
-  predicted_closing_price: 4123,
-  opening_price: 124,
-  actual_closing_price: 5124,
-  daily_high: 125,
-  daily_low: 124,
-  volume: 10000,
-};
-const price30 = {
-  id: 0,
-  stock: "AMZN",
-  date: new Date("2020-01-03"),
-  predicted_closing_price: 3123,
-  opening_price: 124,
-  actual_closing_price: 1124,
-  daily_high: 125,
-  daily_low: 124,
-  volume: 10000,
-};
-const price40 = {
-  id: 0,
-  stock: "AMZN",
-  date: new Date("2020-01-04"),
-  predicted_closing_price: 2123,
-  opening_price: 124,
-  actual_closing_price: 3124,
-  daily_high: 125,
-  daily_low: 124,
-  volume: 10000,
-};
-const price50 = {
-  id: 0,
-  stock: "AMZN",
-  date: new Date("2020-01-05"),
-  predicted_closing_price: 1123,
-  opening_price: 124,
-  actual_closing_price: 2124,
-  daily_high: 125,
-  daily_low: 124,
-  volume: 10000,
-};
-const priceList = [price1, price2, price3, price4, price5];
-const priceList2 = [price10, price20, price30, price40, price50];
-const stocks = [
-  { stock: stock1, prices: priceList },
-  { stock: stock2, prices: priceList2 },
-  { stock: stock3, prices: priceList },
-  { stock: stock4, prices: priceList2 },
-  { stock: stock5, prices: priceList },
-];
+import { getStockPrices, getStockList } from "../api/requests";
+import { apiURL } from "../constants";
 
 export function StockPage() {
+  const [state, updateState] = useContext(CapitalizerContext);
+  const [selectedCategory, setSelectedCategory] = useState("");
+
+  useEffect(() => {
+    if (state.stocks.length == 0 && state.authToken !== "") {
+      getStockList(apiURL + "stock/", state.authToken, [], updateState);
+    }
+    if (state.stockPrices.length === 0 && state.authToken !== "") {
+      getStockPrices(apiURL + "stock-price/", state.authToken, [], updateState);
+    }
+  }, [state.authToken]);
+
+  const StockDetails = [];
+
+  for (const [index, value] of state.stocks.entries()) {
+    if (selectedCategory === "" || selectedCategory === value.category) {
+      if (
+        value.name.toLowerCase().includes(state.searchField.toLowerCase()) ||
+        value.symbol.toLowerCase().includes(state.searchField.toLowerCase())
+      ) {
+        let prices = state.stockPrices
+          .filter((price) => price.stock === value.symbol)
+          .sort((a, b) => a.id - b.id);
+
+        if (prices.length > 3) {
+          const predictedClose =
+            prices[prices.length - 1].predicted_closing_price;
+          const mostRecentData = prices[prices.length - 2];
+
+          StockDetails.push(
+            <SearchStockDetail
+              key={index}
+              name={value.name}
+              openPrice={parseFloat(mostRecentData.actual_closing_price)}
+              predictedClose={parseFloat(predictedClose)}
+              low={parseFloat(mostRecentData.daily_low)}
+              high={parseFloat(mostRecentData.daily_high)}
+              previousClose={parseFloat(mostRecentData.opening_price)}
+              volume={parseFloat(mostRecentData.volume)}
+              prices={prices}
+            ></SearchStockDetail>
+          );
+        }
+      }
+    }
+  }
+
   return (
     <div style={{ display: "flex" }}>
-      <SideBar></SideBar>
+      <SideBar
+        selected={selectedCategory}
+        setSelected={setSelectedCategory}
+      ></SideBar>
       <div style={{ flexGrow: "1" }}>
         <SearchBar></SearchBar>
-        <DetailContainer>
-          <SearchStockDetail
-            name={"Amazon1 AMZN"}
-            openPrice={120}
-            predictedClose={125}
-            low={110}
-            high={135}
-            previousClose={115}
-            volume={87266152}
-            selectedStock={stocks[0]}
-          ></SearchStockDetail>
-          <SearchStockDetail
-            name={"Amazon2 AMZN"}
-            openPrice={120}
-            predictedClose={125}
-            low={110}
-            high={135}
-            previousClose={115}
-            volume={87266152}
-            selectedStock={stocks[1]}
-          ></SearchStockDetail>
-          <SearchStockDetail
-            name={"Amazon2 AMZN"}
-            openPrice={120}
-            predictedClose={125}
-            low={110}
-            high={135}
-            previousClose={115}
-            volume={87266152}
-            selectedStock={stocks[2]}
-          ></SearchStockDetail>
-        </DetailContainer>
+        <DetailContainer>{StockDetails}</DetailContainer>
       </div>
     </div>
   );

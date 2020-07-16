@@ -1,20 +1,29 @@
-import React from "react";
+import React, { useContext } from "react";
+import { CapitalizerContext } from "../Context";
 import styled from "styled-components";
 import { Categories } from "../constants";
 
-export function SideBar() {
+export function SideBar({ selected, setSelected }) {
   const AvailableCategories = [];
 
   for (const [index, value] of Categories.entries()) {
     AvailableCategories.push(
-      <Category
+      <div
         key={index}
-        onClick={() => {
-          /* TODO HANDLE CLICK */
-        }}
+        style={selected === value ? { color: "#00aa00" } : { color: "white" }}
       >
-        {value}
-      </Category>
+        <Category
+          onClick={() => {
+            if (selected === value) {
+              setSelected("");
+            } else {
+              setSelected(value);
+            }
+          }}
+        >
+          {value}
+        </Category>
+      </div>
     );
   }
 
@@ -56,8 +65,7 @@ const SideBarContainer = styled.div`
 const Category = styled.div`
   font-size: 20px;
   line-height: 30px;
-  color: white;
   :hover {
-    color: #75a9f9;
+    color: #00aa00;
   }
 `;
