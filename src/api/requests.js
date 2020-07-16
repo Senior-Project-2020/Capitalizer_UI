@@ -3,20 +3,24 @@ import { apiURL } from "../constants";
 
 export function getSuggestions(date, token, updateState) {
   axios
-    .get(apiURL + "suggestion/?date=" + date, {
-      headers: {
-        Authorization: "Token " + token,
+    .get( apiURL + "suggestion/?date=" + date, { 
+      headers: { 
+         Authorization: "Token " + token,
       },
     })
     .then((response) => {
-      if (response.status === 200) {
+      if (response.status === 200){
+        if (response.data.suggestions === null) {
+          return;
+        }
+
         // Sort the suggestions based on the predicted percent change
         const suggestions = response.data.suggestions.sort((s1, s2) => {
-          return s1.percent_change - s2.percent_change;
+            return s1.percent_change - s2.percent_change;
         });
         updateState({
-          type: "update suggestions",
-          suggestions: suggestions,
+            type: "update suggestions",
+            suggestions: suggestions,
         });
       }
     });

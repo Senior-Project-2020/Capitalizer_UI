@@ -4,6 +4,7 @@ import { useHistory } from "react-router";
 import { CapitalizerContext } from "../Context";
 import axios from "axios";
 import FormData from 'form-data';
+import { apiURL } from '../constants';
 
 export function SignupForm() {
     const [username, setUsername] = useState("");
@@ -27,12 +28,9 @@ export function SignupForm() {
             form.append("password1", password1);
             form.append("password2", password2);
 
-            axios.post("http://localhost:8000/api/v1/rest-auth/registration/", form).then((response) => {
+            axios.post(apiURL + "rest-auth/registration/", form).then((response) => {
                 if (response.status === 201){
-                    updateContext({
-                        type: "update user",
-                        user: response.data.key,
-                    });
+                    sessionStorage.setItem("authToken", response.data.key);
                     onFormSuccess();
                 }
                 else{
@@ -40,22 +38,28 @@ export function SignupForm() {
                 }
             }).catch((err) => {
                 const errors = [];
-                
-                // If there are username errors, then only display those
-                if (err.response.data.username !== undefined){
-                    for (const errIndex in err.response.data.username){
-                        errors.push(<WarningMessage key={errIndex}>{err.response.data.username[errIndex]}</WarningMessage>);
+
+                if (err.response !== undefined) {
+                    // If there are username errors, then only display those
+                    if (err.response.data.username !== undefined){
+                        for (const errIndex in err.response.data.username){
+                            errors.push(<WarningMessage key={errIndex}>{err.response.data.username[errIndex]}</WarningMessage>);
+                        }
                     }
-                }
-                // If there are no username errors, then display all other errors
-                else {
-                    for (const obj in err.response.data){
-                        for (const errIndex in err.response.data[obj]){
-                            const msg = err.response.data[obj][errIndex];
-                            errors.push(<WarningMessage key={errIndex}>{msg}</WarningMessage>);
+                    // If there are no username errors, then display all other errors
+                    else {
+                        for (const obj in err.response.data){
+                            for (const errIndex in err.response.data[obj]){
+                                const msg = err.response.data[obj][errIndex];
+                                errors.push(<WarningMessage key={errIndex}>{msg}</WarningMessage>);
+                            }
                         }
                     }
                 }
+                else {
+                    errors.push(<WarningMessage key={0}>{err.message}</WarningMessage>);
+                }
+                
                 
                 setWarning(errors);
             })
