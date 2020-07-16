@@ -203,7 +203,7 @@ export function SmallAreaGraph({ data, positiveColor }) {
 SmallAreaGraph.propTypes = {
     data: PropTypes.arrayOf(
         PropTypes.shape({
-            x: PropTypes.instanceOf(Date).isRequired,
+            x: PropTypes.string.isRequired,
             y: PropTypes.any.isRequired,
         }).isRequired,
     ),
