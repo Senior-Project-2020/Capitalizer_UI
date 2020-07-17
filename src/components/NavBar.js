@@ -46,6 +46,7 @@ const LinkWrapper = styled.div`
   color: white;
   font-size: 25px;
   padding: 30px;
+  cursor: pointer;
 `;
 
 const Link = ({ path, children }) => {
