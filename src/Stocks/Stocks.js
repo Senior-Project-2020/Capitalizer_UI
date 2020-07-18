@@ -16,7 +16,7 @@ export function StockPage() {
       getStockList(apiURL + "stock/", state.authToken, [], updateState);
     }
     if (state.stockPrices.length === 0 && state.authToken !== "") {
-      getStockPrices(apiURL + "stock-price/", state.authToken, [], updateState);
+      getStockPrices(apiURL + "stock-price/?recent=all", state.authToken, [], updateState);
     }
   }, [state.authToken]);
 
