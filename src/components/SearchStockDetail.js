@@ -50,11 +50,6 @@ export function SearchStockDetail({
             setOpen(!open);
           }}
         >
-          {open ? (
-            <TextEntry style={{ marginLeft: "auto"}}>
-              Closing Price Over Time
-            </TextEntry>
-          ) : null}
           {open ? <UpArrowIcon></UpArrowIcon> : <DownArrowIcon></DownArrowIcon>}
         </IconContainer>
       </div>

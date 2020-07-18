@@ -167,6 +167,15 @@ export function SmallAreaGraph({ data, positiveColor }) {
         stroke: {
             colors: [colors.stroke],
         },
+        title: {
+            text: "Closing Price Over Time",
+            align: "center",
+            style: {
+                fontFamily: "iceland regular",
+                fontSize: "25px",
+                color: "#ffffff",
+            },
+        },
         tooltip: {
             enabled: false,
         },
@@ -197,7 +206,7 @@ export function SmallAreaGraph({ data, positiveColor }) {
                 options={options} 
                 series={series} 
                 type="area"
-                height={"100%"}
+                height={"225px"}
             ></Chart>
     );
 }
