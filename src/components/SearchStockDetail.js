@@ -37,7 +37,7 @@ export function SearchStockDetail({
         <TextContainer>
           <StockDetailHeader>{name}</StockDetailHeader>
           <StockDetailBody>
-            <TextEntry>Opening Price: ${openPrice.toFixed(2)}</TextEntry>
+            <TextEntry>Previous Closing Price: ${previousClose.toFixed(2)}</TextEntry>
             <TextEntry>
               Predicted Closing: ${predictedClose.toFixed(2)}
             </TextEntry>
@@ -64,6 +64,9 @@ export function SearchStockDetail({
           <TextContainer>
             <TextEntry>Low Price: ${low.toFixed(2)}</TextEntry>
             <TextEntry>High Price: ${high.toFixed(2)}</TextEntry>
+            <TextEntry>
+              Yesterdays Opening: ${openPrice.toFixed(2)}
+            </TextEntry>
             <TextEntry>
               Yesterdays Closing: ${previousClose.toFixed(2)}
             </TextEntry>
