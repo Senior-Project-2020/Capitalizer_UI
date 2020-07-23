@@ -16,7 +16,7 @@ export function StockPage() {
       getStockList(apiURL + "stock/", state.authToken, [], updateState);
     }
     if (state.stockPrices.length === 0 && state.authToken !== "") {
-      getStockPrices(apiURL + "stock-price/", state.authToken, [], updateState);
+      getStockPrices(apiURL + "stock-price/?recent=all", state.authToken, [], updateState);
     }
   }, [state.authToken]);
 
@@ -41,11 +41,11 @@ export function StockPage() {
             <SearchStockDetail
               key={index}
               name={value.name}
-              openPrice={parseFloat(mostRecentData.actual_closing_price)}
+              openPrice={parseFloat(mostRecentData.opening_price)}
               predictedClose={parseFloat(predictedClose)}
               low={parseFloat(mostRecentData.daily_low)}
               high={parseFloat(mostRecentData.daily_high)}
-              previousClose={parseFloat(mostRecentData.opening_price)}
+              previousClose={parseFloat(mostRecentData.actual_closing_price)}
               volume={parseFloat(mostRecentData.volume)}
               prices={prices}
             ></SearchStockDetail>
