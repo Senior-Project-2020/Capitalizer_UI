@@ -12,6 +12,9 @@ export function StockInfo({ data }) {
             if (key === "volume"){
                 dataElements.push(<p key={key}>{startCase(key.replace(/_/g, " ")) + ": " + value}</p>)
             }
+            else if (key === "predicted_closing_price") {
+                dataElements.push(<p key={key}>{startCase("Previous " + key.replace(/_/g, " ")) + ": " + value.toFixed(2)}</p>)
+            }
             else {
                 // Add dollar sign and use two decimal places for fields with money data
                 dataElements.push(<p key={key}>{startCase(key.replace(/_/g, " ")) + ": $" + value.toFixed(2)}</p>);
