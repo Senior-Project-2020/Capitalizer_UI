@@ -3,8 +3,6 @@ import { useHistory } from "react-router";
 import styled from "styled-components";
 import { CapitalizerContext } from "../Context";
 
-const url = "http://54.198.60.36/api/v1/";
-
 export function LogOutButton() {
   const history = useHistory();
   const [context, updateContext] = useContext(CapitalizerContext);

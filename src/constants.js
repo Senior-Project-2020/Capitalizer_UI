@@ -12,4 +12,4 @@ export const Categories = [
   "Energy",
 ];
 
-export const apiURL = "http://54.198.60.36/api/v1/";
+export const apiURL = "http://api.project-capitalizer.com/api/v1/";

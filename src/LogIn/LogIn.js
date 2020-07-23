@@ -3,9 +3,8 @@ import { useHistory } from "react-router";
 import { CredentialsForm } from "../components/CredentialsForm";
 import { LogInButton } from "../components/Buttons";
 import { CapitalizerContext } from "../Context";
+import { apiURL } from "../constants";
 import axios from "axios";
-
-const url = "http://54.198.60.36/api/v1/";
 
 export function LogInPage() {
   const history = useHistory();
@@ -21,7 +20,7 @@ export function LogInPage() {
     };
 
     axios
-      .post(url + "rest-auth/login/", loginCredentials)
+      .post(apiURL + "rest-auth/login/", loginCredentials)
       .then((response) => {
         if (response.status === 200) {
           sessionStorage.setItem("authToken", response.data.key);
